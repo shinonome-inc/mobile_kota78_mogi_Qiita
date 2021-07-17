@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:qiita_app1/feed_page_02.dart';
-import 'package:qiita_app1/tag_page_03.dart';
-import 'package:qiita_app1/my_page_05.dart';
-import 'package:qiita_app1/setting_page_06.dart';
+import 'package:qiita_app1/feed_page.dart';
+import 'package:qiita_app1/tag_page.dart';
+import 'package:qiita_app1/my_page.dart';
+import 'package:qiita_app1/setting_page.dart';
 
 
 class Root extends StatefulWidget {
@@ -21,7 +21,7 @@ class _RootState extends State<Root> {
     SettingPage(),
   ];
 
-  void _onItemTap(int index){
+  void _onItemTap(int index) {
     setState(() {
       _selectedIndex = index;
     });
@@ -30,9 +30,6 @@ class _RootState extends State<Root> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Qiita'),
-      ),
       body: Center(
         child: _widgetOptions.elementAt((_selectedIndex)),
       ),
