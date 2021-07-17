@@ -28,7 +28,7 @@ class _TopPageState extends State<TopPage> {
               Positioned.fill(
                 child: Container(
                   color: Colors.black.withOpacity(0.2),),
-              g),
+              ),
               Column(children: [
                 Expanded(flex: 4, child: (Container())),
                 Text(
