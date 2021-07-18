@@ -9,7 +9,14 @@ class TagPage extends StatelessWidget {
           bottomOpacity: 0.0,
           elevation: 0.0,
           backgroundColor: Colors.white,
-        title: Text("Tags",style: TextStyle(color: Colors.black,fontSize: 15.0),),
+          title: Text(
+            "Tags",
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 15.0,
+              fontFamily: "Pacifico",
+            ),
+          ),
         ),
         body: CustomScrollView(
           slivers: [

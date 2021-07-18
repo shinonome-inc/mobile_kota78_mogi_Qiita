@@ -35,11 +35,13 @@ class _TopPageState extends State<TopPage> {
                     "Qiita Feed App",
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                        fontSize: 40.0,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold)
+                      fontSize: 40.0,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: "Pacifico",
+                    ),
                 ),
-                Text("-PlayGround-"),
+                Text("-PlayGround-", style: TextStyle(color: Colors.white),),
                 Expanded(flex:5, child: (Container())),
                 Padding(
                   padding: const EdgeInsets.all(20.0),
