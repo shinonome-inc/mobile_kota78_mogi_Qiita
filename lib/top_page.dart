@@ -51,7 +51,7 @@ class _TopPageState extends State<TopPage> {
                     clipBehavior: Clip.antiAlias,
                     child: InkWell(
                       onTap:() {
-                        Navigator.push(
+                        Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(builder: (context) => Root()),
                         );
