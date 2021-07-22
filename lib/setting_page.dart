@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
+class SettingPage extends StatefulWidget {
+  const SettingPage({Key key}) : super(key: key);
 
-class SettingPage extends StatelessWidget {
+  @override
+  _SettingPageState createState() => _SettingPageState();
+}
+
+class _SettingPageState extends State<SettingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,7 +38,34 @@ class SettingPage extends StatelessWidget {
                   ],
                 ),
               ),
-              Container(height:50.0,decoration: BoxDecoration(color: Colors.white),),
+              InkWell(
+                onTap: (){
+                  showModalBottomSheet(
+                    enableDrag: false,
+                    backgroundColor: Colors.transparent,
+                    context: context,
+                    isScrollControlled: true,
+                    builder: (context) => privacyModal(),
+                  );
+                },
+                child: Container(
+                  constraints: BoxConstraints.tightForFinite(height: 50),
+                  decoration: BoxDecoration(color: Colors.white),
+                  child:Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 20.0),
+                        child: Text("プライバシーポリシー"),
+                      ),
+                      Expanded(child: Container()),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 20.0),
+                        child: Icon(Icons.arrow_forward_ios_rounded),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
               Divider(
                 height: 0,
                 thickness: 0.5,
@@ -39,7 +73,34 @@ class SettingPage extends StatelessWidget {
                 indent: 20,
                 endIndent: 0,
               ),
-              Container(height:50.0,decoration: BoxDecoration(color: Colors.white,),),
+              InkWell(
+                onTap: (){
+                  showModalBottomSheet(
+                      enableDrag: false,
+                      backgroundColor: Colors.transparent,
+                      context: context,
+                      isScrollControlled: true,
+                      builder: (context) => termsModal()
+                  );
+                },
+                child: Container(
+                  constraints: BoxConstraints.tightForFinite(height: 50),
+                  decoration: BoxDecoration(color: Colors.white),
+                  child:Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 20.0),
+                        child: Text("利用規約"),
+                      ),
+                      Expanded(child: Container()),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 20.0),
+                        child: Icon(Icons.arrow_forward_ios_rounded),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
               Divider(
                 height: 0,
                 thickness: 0.5,
@@ -47,7 +108,23 @@ class SettingPage extends StatelessWidget {
                 indent: 20,
                 endIndent: 0,
               ),
-              Container(height:50.0,decoration: BoxDecoration(color: Colors.white,),),
+              Container(
+                constraints: BoxConstraints.tightForFinite(height: 50),
+                decoration: BoxDecoration(color: Colors.white),
+                child:Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 20.0),
+                      child: Text("アプリバージョン"),
+                    ),
+                    Expanded(child: Container()),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 20.0),
+                      child: Text("v1.0.0", style: TextStyle(fontWeight: FontWeight.bold),),
+                    ),
+                  ],
+                ),
+              ),
               Divider(
                 height: 0,
                 thickness: 0.5,
@@ -64,7 +141,22 @@ class SettingPage extends StatelessWidget {
                   ],
                 ),
               ),
-              Container(height:50.0,decoration: BoxDecoration(color: Colors.white,),),
+              InkWell(
+                onTap: () {print("LogOut is tapped");},
+                child: Container(
+                  constraints: BoxConstraints.tightForFinite(height: 50),
+                  decoration: BoxDecoration(color: Colors.white),
+                  child:Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 20.0),
+                        child: Text("ログアウトする"),
+                      ),
+                      Expanded(child: Container()),
+                    ],
+                  ),
+                ),
+              ),
               Divider(
                 height: 0,
                 thickness: 0.5,
@@ -77,4 +169,71 @@ class SettingPage extends StatelessWidget {
         )
     );
   }
+
+  Widget privacyModal() => Container(
+    height: 600,
+    child: Column(
+      children: <Widget>[
+        Expanded(
+          flex:1,
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.grey[300],
+              borderRadius: const BorderRadius.only(
+                topRight: const Radius.circular(20),
+                topLeft: const Radius.circular(20),
+              ),
+            ),
+            child: Align(alignment: Alignment.center,
+                child: Text("プライバシーポリシー",
+                  style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 20),)),
+          ),
+        ),
+        Expanded(
+          flex:10,
+          child: Container(
+            child:WebView(
+              initialUrl: 'https://qiita.com/privacy',
+              javascriptMode: JavascriptMode.unrestricted,
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
+
+  Widget termsModal() => Container(
+    height: 600,
+    child: Column(
+      children: <Widget>[
+        Expanded(
+          flex:1,
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.grey[300],
+              borderRadius: const BorderRadius.only(
+                topRight: const Radius.circular(20),
+                topLeft: const Radius.circular(20),
+              ),
+            ),
+            child: Align(alignment: Alignment.center,
+                child: Text("利用規約",
+                  style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 20),)),
+          ),
+        ),
+        Expanded(
+          flex:10,
+          child: Container(
+            child:WebView(
+              initialUrl: 'https://qiita.com/terms',
+              javascriptMode: JavascriptMode.unrestricted,
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
+
 }
+
+
