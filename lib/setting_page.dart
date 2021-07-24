@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:qiita_app1/hex_color.dart';
 
 class SettingPage extends StatefulWidget {
   const SettingPage({Key key}) : super(key: key);
@@ -315,18 +316,5 @@ Hoge, inc.（以下「当社」といいます。）は、当社が運営する�
 MAIL: hoge@hoge.io""";
 }
 
-
-
-class HexColor extends Color {
-  static int _getColorFromHex(String hexColor) {
-    hexColor = hexColor.toUpperCase().replaceAll('#', '');
-    if (hexColor.length == 6) {
-      hexColor = 'FF' + hexColor;
-    }
-    return int.parse(hexColor, radix: 16);
-  }
-
-  HexColor(final String hexColor) : super(_getColorFromHex(hexColor));
-}
 
 
