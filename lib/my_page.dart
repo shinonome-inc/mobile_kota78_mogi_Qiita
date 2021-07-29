@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-
+import 'package:webview_flutter/webview_flutter.dart';
 
 class MyPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar:AppBar(
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(
           bottomOpacity: 0.0,
           elevation: 0.0,
           backgroundColor: Colors.white,
@@ -18,21 +19,13 @@ class MyPage extends StatelessWidget {
             ),
           ),
         ),
-        body: CustomScrollView(
-          slivers: [
-            SliverList(
-              delegate: SliverChildListDelegate(
-                  [
-                    Card(child: ListTile(title: Text("aaa"),subtitle: Text("bbb"),leading: FlutterLogo(),)),
-                    Card(child: ListTile(title: Text("aaa"),subtitle: Text("bbb"),leading: FlutterLogo(),)),
-                    Card(child: ListTile(title: Text("aaa"),subtitle: Text("bbb"),leading: FlutterLogo(),)),
-                  ]
-              ),
-            ),
-
-            // other sliver widgets
-          ],
-        )
+        body: Center(
+          child: WebView(
+            initialUrl: 'https://qiita.com/ko_cha78',
+            javascriptMode: JavascriptMode.unrestricted,
+          ),
+        ),
+      ),
     );
   }
 }
