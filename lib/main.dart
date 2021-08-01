@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:qiita_app1/top_page.dart';
+import 'package:qiita_app1/page/top_page.dart';
 
 void main() => runApp(MyApp());
 
