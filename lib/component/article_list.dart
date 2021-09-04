@@ -18,36 +18,33 @@ class ArticleListView extends StatefulWidget {
 class _ArticleListViewState extends State<ArticleListView> {
   QiitaClient qiitaClient = QiitaClient();
 
-
+  
   Widget _modal (Article article){
     return Container(
-      height: MediaQuery.of(context).size.height * 0.85,
+      height: MediaQuery.of(context).size.height * 0.8,
       child: Column(
         children: <Widget>[
-          Expanded(
-            flex:1,
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.grey[300],
-                borderRadius: const BorderRadius.only(
-                  topRight: const Radius.circular(20),
-                  topLeft: const Radius.circular(20),
-                ),
+          Container(
+            height: 60,
+            decoration: BoxDecoration(
+              color: Colors.grey[300],
+              borderRadius: const BorderRadius.only(
+                topRight: const Radius.circular(20),
+                topLeft: const Radius.circular(20),
               ),
-              child: Align(alignment: Alignment.center,
-                  child: Text("Article",
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
-                        fontFamily: 'Pacifico'
-                    ),
+            ),
+            child: Align(alignment: Alignment.center,
+              child: Text("Article",
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                      fontFamily: 'Pacifico'
                   )
               ),
             ),
           ),
           Expanded(
-            flex:10,
             child: Container(
               color: Colors.white,
               child:Padding(
@@ -61,10 +58,8 @@ class _ArticleListViewState extends State<ArticleListView> {
     );
   }
 
-
   @override
   Widget build(BuildContext context) {
-    //final Size size = MediaQuery.of(context).size;
     return Expanded(
       child: RefreshIndicator(
         onRefresh: () async {
@@ -75,10 +70,7 @@ class _ArticleListViewState extends State<ArticleListView> {
           itemCount: widget.articles.length,
           itemBuilder: (BuildContext context, int index) {
             final article = widget.articles[index];
-            var year = article.updatedAt.substring(0,4);
-            var month = article.updatedAt.substring(5,7);
-            var day = article.updatedAt.substring(8,10);
-            DateTime dateTime = DateTime(int.parse(year), int.parse(month), int.parse(day));
+            DateTime dateTime = DateTime.parse(article.updatedAt);
             return Card(
               elevation: 0,
               margin: EdgeInsets.all(0),
@@ -103,7 +95,7 @@ class _ArticleListViewState extends State<ArticleListView> {
                     ),
                     onTap: () {
                       showModalBottomSheet(
-                          enableDrag: false,
+                          enableDrag: true,
                           backgroundColor: Colors.transparent,
                           context: context,
                           isScrollControlled: true,
@@ -116,6 +108,7 @@ class _ArticleListViewState extends State<ArticleListView> {
                     height: 0,
                     thickness: 0.5,
                     color: HexColor('E0E0E0'),
+                    indent: 70,
                   ),
                 ],
               ),

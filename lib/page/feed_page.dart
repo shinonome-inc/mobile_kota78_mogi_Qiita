@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:qiita_app1/client/qiita_client.dart';
 import 'package:qiita_app1/model/article.dart';
 import 'package:qiita_app1/component/article_list.dart';
+import 'package:qiita_app1/hex_color.dart';
 
 class FeedPage extends StatefulWidget {
   const FeedPage({Key key}) : super(key: key);
@@ -15,48 +16,43 @@ class _FeedPageState extends State<FeedPage> {
   QiitaClient qiitaClient = QiitaClient();
 
   //Kaoruさんのコード
-  String onChangedText = '';
   final textController = TextEditingController();
 
   Widget _textField() {
-    return TextFormField(
-      autocorrect: true,
-      controller: textController,
-      decoration: InputDecoration(
-        hintText: 'Search',
-        prefixIcon: Icon(Icons.search, size: 25, color: Colors.grey,),
-        isDense: true,
-        contentPadding: EdgeInsets.fromLTRB(10, 12, 12, 10),
-        hintStyle: TextStyle(color: Colors.grey),
-        filled: true,
-        fillColor: Colors.grey[200],
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(15),
-          borderSide: BorderSide(color: Colors.grey, width: 1),
+    return Container(
+      height: 36,
+      child: TextFormField(
+        autocorrect: true,
+        controller: textController,
+        decoration: InputDecoration(
+          hintText: 'Search',
+          prefixIcon: Icon(Icons.search, size: 25, color: HexColor('#8E8E93'),),
+          isDense: true,
+          contentPadding: EdgeInsets.fromLTRB(10, 12, 12, 10),
+          hintStyle: TextStyle(color: HexColor('#8E8E93')),
+          filled: true,
+          fillColor: HexColor('#EFEFF0'),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: BorderSide(color: Colors.transparent, width: 1),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: BorderSide(color: Colors.transparent, width: 1),
+          ),
+          errorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: BorderSide(color: Colors.redAccent, width: 1),
+          ),
         ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(15),
-          borderSide: BorderSide(color: Colors.blue, width: 1),
-        ),
-        errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(15),
-          borderSide: BorderSide(color: Colors.redAccent, width: 1),
-        ),
+        // ユーザーがフィールドのテキストの編集が完了したことを示したときに呼び出される
+        onFieldSubmitted: (value) {
+          print('onFieldSubmitted: $value');
+          setState(() {
+            onFieldSubmittedText = value;
+          });
+        },
       ),
-      // フィールドのテキストが変更される度に呼び出される　　　　必要ない（？）
-      onChanged: (value) {
-        print('onChanged: $value');
-        setState(() {
-          onChangedText = value;
-        });
-      },
-      // ユーザーがフィールドのテキストの編集が完了したことを示したときに呼び出される
-      onFieldSubmitted: (value) {
-        print('onFieldSubmitted: $value');
-        setState(() {
-          onFieldSubmittedText = value;
-        });
-      },
     );
   }
 //ここまで
@@ -82,10 +78,19 @@ class _FeedPageState extends State<FeedPage> {
             ),
           ),
           bottom: PreferredSize(
-            preferredSize: const Size.fromHeight(50),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 5),
-              child: _textField(),
+            preferredSize: const Size.fromHeight(54),
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 9),
+                  child: _textField(),
+                ),
+                Divider(
+                  height: 0,
+                  thickness: 0.5,
+                  color: HexColor('E0E0E0'),
+                ),
+              ],
             ),
           ),
         ),

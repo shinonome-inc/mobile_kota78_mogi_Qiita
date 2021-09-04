@@ -42,7 +42,7 @@ class _SettingPageState extends State<SettingPage> {
               InkWell(
                 onTap: (){
                   showModalBottomSheet(
-                    enableDrag: false,
+                    enableDrag: true,
                     backgroundColor: Colors.transparent,
                     context: context,
                     isScrollControlled: true,
@@ -77,7 +77,7 @@ class _SettingPageState extends State<SettingPage> {
               InkWell(
                 onTap: (){
                   showModalBottomSheet(
-                      enableDrag: false,
+                      enableDrag: true,
                       backgroundColor: Colors.transparent,
                       context: context,
                       isScrollControlled: true,
@@ -172,28 +172,24 @@ class _SettingPageState extends State<SettingPage> {
   }
 
   Widget privacyModal() {
-    final Size size = MediaQuery.of(context).size;
     return Container(
-      height: size.height * 0.9,
+      height: MediaQuery.of(context).size.height * 0.9,
       child: Column(
         children: <Widget>[
-          Expanded(
-            flex:1,
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.grey[300],
-                borderRadius: const BorderRadius.only(
-                  topRight: const Radius.circular(20),
-                  topLeft: const Radius.circular(20),
-                ),
+          Container(
+            height: 60,
+            decoration: BoxDecoration(
+              color: Colors.grey[300],
+              borderRadius: const BorderRadius.only(
+                topRight: const Radius.circular(20),
+                topLeft: const Radius.circular(20),
               ),
-              child: Align(alignment: Alignment.center,
-                  child: Text("プライバシーポリシー",
-                    style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 20),)),
             ),
+            child: Align(alignment: Alignment.center,
+                child: Text("プライバシーポリシー",
+                  style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 20),)),
           ),
           Expanded(
-            flex:10,
             child: Container(
               color: Colors.white,
               child:Padding(
@@ -208,28 +204,24 @@ class _SettingPageState extends State<SettingPage> {
   }
 
   Widget termsModal() {
-    final Size size = MediaQuery.of(context).size;
     return Container(
-      height: size.height * 0.9,
+      height: MediaQuery.of(context).size.height * 0.9,
       child: Column(
         children: <Widget>[
-          Expanded(
-            flex:1,
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.grey[300],
-                borderRadius: const BorderRadius.only(
-                  topRight: const Radius.circular(20),
-                  topLeft: const Radius.circular(20),
-                ),
+          Container(
+            height: 60,
+            decoration: BoxDecoration(
+              color: Colors.grey[300],
+              borderRadius: const BorderRadius.only(
+                topRight: const Radius.circular(20),
+                topLeft: const Radius.circular(20),
               ),
-              child: Align(alignment: Alignment.center,
-                  child: Text("利用規約",
-                    style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 20),)),
             ),
+            child: Align(alignment: Alignment.center,
+                child: Text("利用規約",
+                  style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 20),)),
           ),
           Expanded(
-            flex:10,
             child: Container(
               color: Colors.white,
               child:Padding(
