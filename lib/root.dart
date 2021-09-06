@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:qiita_app1/feed_page.dart';
-import 'package:qiita_app1/tag_page.dart';
-import 'package:qiita_app1/my_page.dart';
-import 'package:qiita_app1/setting_page.dart';
+import 'package:qiita_app1/page/feed_page.dart';
+import 'package:qiita_app1/page/tag_page.dart';
+import 'package:qiita_app1/page/my_page.dart';
+import 'package:qiita_app1/page/setting_page.dart';
 
 
 class Root extends StatefulWidget {
