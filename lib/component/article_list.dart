@@ -63,7 +63,7 @@ class _ArticleListViewState extends State<ArticleListView> {
     return Expanded(
       child: RefreshIndicator(
         onRefresh: () async {
-          print('Loading New Data');
+          print('Loading New Article Data');
           QiitaClient.fetchArticle();
         },
         child: ListView.builder(
