@@ -3,6 +3,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:qiita_app1/client/qiita_client.dart';
 import 'package:qiita_app1/hex_color.dart';
 import 'package:qiita_app1/model/tag.dart';
+import 'package:qiita_app1/page/tag_detail_page.dart';
+
+String tagName = "";
 
 class TagListView extends StatefulWidget {
   final List<Tag> tags;
@@ -22,7 +25,6 @@ class _TagListViewState extends State<TagListView> {
         padding: const EdgeInsets.all(8.0),
         child: RefreshIndicator(
           onRefresh: () async {
-            print('Loading New Tag Data');
             QiitaTags.fetchTag();
           },
           child: GridView.builder(
@@ -40,7 +42,14 @@ class _TagListViewState extends State<TagListView> {
                   borderRadius: BorderRadius.all(Radius.circular(10.0)),
                   clipBehavior: Clip.antiAlias,
                   child: InkWell(
-                    onTap: (){},
+                    onTap: (){
+                      tagName =tag.id;
+                      print("Tag: " + tagName);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => TagDetailPage()),
+                      );
+                    },
                     child: Container(
                       decoration: BoxDecoration(
                         border: Border.all(color: HexColor('#E0E0E0'),),
@@ -51,12 +60,12 @@ class _TagListViewState extends State<TagListView> {
                           if (tag.iconUrl == null) {
                             return Icon(Icons.cancel);
                           } else {
-                            return Image.asset(tag.iconUrl);
+                            return Image.network(tag.iconUrl);
                           }
                         })(),
-                        Text(tag.id),
-                        Text("記事件数:" + tag.itemsCount.toString()),
-                        Text("フォロワー数" + tag.followersCount.toString()),
+                        Text(tag.id, style: TextStyle(color: HexColor('#333333'), fontSize: 14),),
+                        Text("記事件数:" + tag.itemsCount.toString(), style: TextStyle(color: HexColor('#828282'), fontSize: 12),),
+                        Text("フォロワー数" + tag.followersCount.toString(), style: TextStyle(color: HexColor('#828282'), fontSize: 12),),
                       ]
                       ),
                     ),

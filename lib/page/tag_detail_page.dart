@@ -1,10 +1,86 @@
-import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:qiita_app1/client/qiita_client.dart';
-import 'package:webview_flutter/webview_flutter.dart';
-import 'package:qiita_app1/hex_color.dart';
+import 'package:flutter/material.dart';
 import 'package:qiita_app1/model/article.dart';
+import 'package:qiita_app1/hex_color.dart';
 import 'package:intl/intl.dart';
+import 'package:webview_flutter/webview_flutter.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:qiita_app1/component/tag_list.dart';
+
+class TagDetailPage extends StatefulWidget {
+  const TagDetailPage({Key key}) : super(key: key);
+  @override
+  _TagDetailPageState createState() => _TagDetailPageState();
+}
+
+class _TagDetailPageState extends State<TagDetailPage> {
+
+  FetchTagDetail fetchTagDetail = FetchTagDetail();
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Fetch Data Example',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: Scaffold(
+        appBar:AppBar(
+          elevation: 0.0,
+          backgroundColor: Colors.white,
+          leading: BackButton(
+            color: HexColor("#468300"),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          title: Text(
+            tagName,
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 15.0,
+              fontFamily: "Pacifico",
+            ),
+          ),
+          bottom: PreferredSize(
+            preferredSize: const Size.fromHeight(28),
+            child:Container(
+              color: HexColor("#F2F2F2"),
+              child: Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical:8.0),
+                    child: Text("投稿記事", style: TextStyle(color: HexColor("#828282"),),),
+                  ),
+                  Expanded(child: Container()),
+                ],
+              ),
+            )
+          ),
+        ),
+        body: Center(
+          child: Column(
+            children: [
+              FutureBuilder<List<Article>>(
+                future: FetchTagDetail.fetchArticle(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return ArticleListView(articles: snapshot.data);
+                  }
+                  return Expanded(
+                    child: Container(
+                        alignment: Alignment.center,
+                        child: CircularProgressIndicator()
+                    ),
+                  );
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
 
 
 class ArticleListView extends StatefulWidget {
@@ -16,9 +92,9 @@ class ArticleListView extends StatefulWidget {
 }
 
 class _ArticleListViewState extends State<ArticleListView> {
-  QiitaClient qiitaClient = QiitaClient();
+  FetchTagDetail fetchTagDetail = FetchTagDetail();
 
-  
+
   Widget _modal (Article article){
     return Container(
       height: MediaQuery.of(context).size.height * 0.8,
@@ -63,7 +139,7 @@ class _ArticleListViewState extends State<ArticleListView> {
     return Expanded(
       child: RefreshIndicator(
         onRefresh: () async {
-          QiitaClient.fetchArticle();
+          FetchTagDetail.fetchArticle();
         },
         child: ListView.builder(
           itemCount: widget.articles.length,
@@ -116,5 +192,19 @@ class _ArticleListViewState extends State<ArticleListView> {
         ),
       ),
     );
+  }
+}
+
+class FetchTagDetail {
+  static Future<List<Article>> fetchArticle() async {
+    final _url = "https://qiita.com/api/v2/items?page=1&per_page=20&query=" +tagName+ "%3AQiita";
+    final response = await http.get(Uri.parse(_url));
+    if (response.statusCode == 200) {
+      final List<dynamic> tagArticleJsonArray = json.decode(response.body);
+      print('Loaded New Article Data');
+      return tagArticleJsonArray.map((json) => Article.fromJson(json)).toList();
+    } else {
+      throw Exception('Failed to load article');
+    }
   }
 }
