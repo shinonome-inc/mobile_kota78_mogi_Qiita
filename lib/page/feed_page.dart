@@ -101,7 +101,14 @@ class _FeedPageState extends State<FeedPage> {
                 future: QiitaClient.fetchArticle(),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
-                    return ArticleListView(articles: snapshot.data);
+                    return Expanded(
+                      child: RefreshIndicator(
+                        onRefresh: () async {
+                          QiitaClient.fetchArticle();
+                        },
+                        child: ArticleListView(articles: snapshot.data),
+                      ),
+                    );
                   }
                   return Expanded(
                     child: Container(

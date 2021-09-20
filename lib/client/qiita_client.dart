@@ -31,3 +31,18 @@ class QiitaTags {
     }
   }
 }
+
+String tagName = "";
+class FetchTagDetail {
+  static Future<List<Article>> fetchArticle() async {
+    final _url = "https://qiita.com/api/v2/items?page=1&per_page=20&query=" +tagName+ "%3AQiita";
+    final response = await http.get(Uri.parse(_url));
+    if (response.statusCode == 200) {
+      final List<dynamic> tagArticleJsonArray = json.decode(response.body);
+      print('Loaded New Article Data');
+      return tagArticleJsonArray.map((json) => Article.fromJson(json)).toList();
+    } else {
+      throw Exception('Failed to load article');
+    }
+  }
+}
