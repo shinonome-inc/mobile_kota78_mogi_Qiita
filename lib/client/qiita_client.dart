@@ -4,8 +4,8 @@ import 'package:qiita_app1/model/article.dart';
 import 'package:qiita_app1/model/tag.dart';
 
 class QiitaClient {
-  static Future<List<Article>> fetchArticle(String string) async {
-    final _url = "https://qiita.com/api/v2/items?page=1&per_page=20&query=" +string+ "%3AQiita";
+  static Future<List<Article>> fetchArticle(String query) async {
+    final _url = "https://qiita.com/api/v2/items?page=1&per_page=20&query=" +query+ "%3AQiita";
     final response = await http.get(Uri.parse(_url));
     if (response.statusCode == 200) {
       final List<dynamic> articleJsonArray = json.decode(response.body);
@@ -28,8 +28,8 @@ class QiitaClient {
     }
   }
 
-  static Future<List<Article>> fetchTagDetail(String string) async {
-    final _url = "https://qiita.com/api/v2/items?page=1&per_page=20&query=" +string+ "%3AQiita";
+  static Future<List<Article>> fetchTagDetail(String query) async {
+    final _url = "https://qiita.com/api/v2/items?page=1&per_page=20&query=" +query+ "%3AQiita";
     final response = await http.get(Uri.parse(_url));
     if (response.statusCode == 200) {
       final List<dynamic> tagArticleJsonArray = json.decode(response.body);
