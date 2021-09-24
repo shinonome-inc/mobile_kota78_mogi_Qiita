@@ -1,12 +1,26 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:qiita_app1/client/qiita_client.dart';
+import 'package:qiita_app1/model/tag.dart';
+import 'package:qiita_app1/component/tag_list.dart';
 
+class TagPage extends StatefulWidget {
+  const TagPage({Key key}) : super(key: key);
+  @override
+  _TagPageState createState() => _TagPageState();
+}
 
-class TagPage extends StatelessWidget {
+class _TagPageState extends State<TagPage> {
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return MaterialApp(
+      title: 'Fetch Data Example',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: Scaffold(
         appBar:AppBar(
-          bottomOpacity: 0.0,
           elevation: 0.0,
           backgroundColor: Colors.white,
           title: Text(
@@ -18,25 +32,27 @@ class TagPage extends StatelessWidget {
             ),
           ),
         ),
-        body: CustomScrollView(
-          slivers: [
-            SliverList(
-              delegate: SliverChildListDelegate(
-                  [
-                    Container(
-                      width: double.infinity,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [Container(width: 30,height: 30,color: Colors.black,)],
-                      ),
-                    )
-                  ]
+        body: Center(
+          child: Column(
+            children: [
+              FutureBuilder<List<Tag>>(
+                future: QiitaClient.fetchTag(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return TagListView(tags: snapshot.data);
+                  }
+                  return Expanded(
+                    child: Container(
+                        alignment: Alignment.center,
+                        child: CircularProgressIndicator()
+                    ),
+                  );
+                },
               ),
-            ),
-
-            // other sliver widgets
-          ],
-        )
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

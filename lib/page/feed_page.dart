@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:qiita_app1/client/qiita_client.dart';
+import 'package:qiita_app1/constants.dart';
 import 'package:qiita_app1/model/article.dart';
 import 'package:qiita_app1/component/article_list.dart';
 import 'package:qiita_app1/hex_color.dart';
@@ -14,6 +15,7 @@ class FeedPage extends StatefulWidget {
 class _FeedPageState extends State<FeedPage> {
 
   QiitaClient qiitaClient = QiitaClient();
+  String onFieldSubmitted = "";
 
   //Kaoruさんのコード
   final textController = TextEditingController();
@@ -48,9 +50,8 @@ class _FeedPageState extends State<FeedPage> {
         // ユーザーがフィールドのテキストの編集が完了したことを示したときに呼び出される
         onFieldSubmitted: (value) {
           print('onFieldSubmitted: $value');
-          setState(() {
-            onFieldSubmittedText = value;
-          });
+          onFieldSubmitted = value;
+          QiitaClient.fetchArticle(onFieldSubmitted);
         },
       ),
     );
@@ -88,7 +89,7 @@ class _FeedPageState extends State<FeedPage> {
                 Divider(
                   height: 0,
                   thickness: 0.5,
-                  color: HexColor('E0E0E0'),
+                  color: HexColor(Constants.separatingLineColor),
                 ),
               ],
             ),
@@ -98,10 +99,17 @@ class _FeedPageState extends State<FeedPage> {
           child: Column(
             children: [
               FutureBuilder<List<Article>>(
-                future: QiitaClient.fetchArticle(),
+                future: QiitaClient.fetchArticle(""),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
-                    return ArticleListView(articles: snapshot.data);
+                    return Expanded(
+                      child: RefreshIndicator(
+                        onRefresh: () async {
+                          QiitaClient.fetchArticle(onFieldSubmitted);
+                        },
+                        child: ArticleListView(articles: snapshot.data),
+                      ),
+                    );
                   }
                   return Expanded(
                     child: Container(

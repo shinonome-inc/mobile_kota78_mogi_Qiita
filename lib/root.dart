@@ -36,10 +36,10 @@ class _RootState extends State<Root> {
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(icon: Icon(Icons.home),label: "フィード"),
-          BottomNavigationBarItem(icon: Icon(Icons.camera),label: "タグ"),
-          BottomNavigationBarItem(icon: Icon(Icons.home),label: "マイページ"),
-          BottomNavigationBarItem(icon: Icon(Icons.camera),label: "設定"),
+          BottomNavigationBarItem(icon: Icon(Icons.list),label: "フィード"),
+          BottomNavigationBarItem(icon: Icon(Icons.label_outline),label: "タグ"),
+          BottomNavigationBarItem(icon: Icon(Icons.perm_identity_outlined),label: "マイページ"),
+          BottomNavigationBarItem(icon: Icon(Icons.settings_outlined),label: "設定"),
       ],
       currentIndex: _selectedIndex,
         onTap: _onItemTap,
