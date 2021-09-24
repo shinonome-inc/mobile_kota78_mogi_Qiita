@@ -6,14 +6,16 @@ import 'package:qiita_app1/component/article_list.dart';
 import 'package:qiita_app1/client/qiita_client.dart';
 
 class TagDetailPage extends StatefulWidget {
-  const TagDetailPage({Key key}) : super(key: key);
+  TagDetailPage(this.tagName);
+  final String tagName;
   @override
   _TagDetailPageState createState() => _TagDetailPageState();
 }
 
 class _TagDetailPageState extends State<TagDetailPage> {
 
-  FetchTagDetail fetchTagDetail = FetchTagDetail();
+  QiitaClient qiitaClient = QiitaClient();
+
 
   @override
   Widget build(BuildContext context) {
@@ -25,14 +27,18 @@ class _TagDetailPageState extends State<TagDetailPage> {
           color: HexColor("#468300"),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        title: Text(
-          tagName,
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 15.0,
-            fontFamily: "Pacifico",
-          ),
-        ),
+        title: (() {
+          if (widget.tagName != null) {
+            return Text(
+              widget.tagName,
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 15.0,
+                fontFamily: "Pacifico",
+              ),
+            );
+          }
+        })(),
         bottom: PreferredSize(
             preferredSize: const Size.fromHeight(28),
             child:Container(
@@ -53,15 +59,16 @@ class _TagDetailPageState extends State<TagDetailPage> {
           child: Column(
             children: [
               FutureBuilder<List<Article>>(
-                future: FetchTagDetail.fetchArticle(),
+                future: QiitaClient.fetchTagDetail(widget.tagName),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     return Expanded(
                       child: RefreshIndicator(
                         onRefresh: () async {
-                          FetchTagDetail.fetchArticle();
+                          QiitaClient.fetchTagDetail(widget.tagName);
                         },
                         child: ArticleListView(articles: snapshot.data),
+                        //child: articleListView(snapshot.data),
                       ),
                     );
                   }

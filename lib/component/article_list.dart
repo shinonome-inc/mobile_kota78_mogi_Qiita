@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:qiita_app1/client/qiita_client.dart';
+import 'package:qiita_app1/constants.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:qiita_app1/hex_color.dart';
 import 'package:qiita_app1/model/article.dart';
@@ -17,8 +18,7 @@ class ArticleListView extends StatefulWidget {
 
 class _ArticleListViewState extends State<ArticleListView> {
   QiitaClient qiitaClient = QiitaClient();
-  FetchTagDetail fetchTagDetail = FetchTagDetail();
-  
+
   Widget _modal (Article article){
     return Container(
       height: MediaQuery.of(context).size.height * 0.8,
@@ -101,7 +101,7 @@ class _ArticleListViewState extends State<ArticleListView> {
               Divider(
                 height: 0,
                 thickness: 0.5,
-                color: HexColor('E0E0E0'),
+                color: HexColor(Constants.separatingLineColor),
                 indent: 70,
               ),
             ],

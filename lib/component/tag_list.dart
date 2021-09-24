@@ -4,7 +4,7 @@ import 'package:qiita_app1/client/qiita_client.dart';
 import 'package:qiita_app1/hex_color.dart';
 import 'package:qiita_app1/model/tag.dart';
 import 'package:qiita_app1/page/tag_detail_page.dart';
-
+import 'package:qiita_app1/constants.dart';
 
 
 class TagListView extends StatefulWidget {
@@ -16,8 +16,8 @@ class TagListView extends StatefulWidget {
 }
 
 class _TagListViewState extends State<TagListView> {
-  QiitaTags qiitaTags = QiitaTags();
-  Constants constants = Constants();
+  QiitaClient qiitaClient = QiitaClient();
+  String tagName;
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +26,7 @@ class _TagListViewState extends State<TagListView> {
         padding: const EdgeInsets.all(10.0),
         child: RefreshIndicator(
           onRefresh: () async {
-            QiitaTags.fetchTag();
+            QiitaClient.fetchTag();
           },
           child: GridView.builder(
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -43,15 +43,16 @@ class _TagListViewState extends State<TagListView> {
                   clipBehavior: Clip.antiAlias,
                   child: InkWell(
                     onTap: () {
-                      tagName =tag.id;
+                      tagName = tag.id;
+                      print(tagName);
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => TagDetailPage()),
+                        MaterialPageRoute(builder: (context) => TagDetailPage(tagName)),
                       );
                     },
                     child: Container(
                       decoration: BoxDecoration(
-                        border: Border.all(color: HexColor('#E0E0E0'),),
+                        border: Border.all(color: HexColor(Constants.separatingLineColor),),
                         borderRadius: BorderRadius.circular(8.0),
                       ),
                       child: Column(
@@ -76,7 +77,7 @@ class _TagListViewState extends State<TagListView> {
                           child: Text(
                             tag.id,
                             style: TextStyle(
-                              color: HexColor(constants.black),
+                              color: HexColor(Constants.black),
                               fontSize: 14,
                               fontWeight: FontWeight.w500,
                             ),

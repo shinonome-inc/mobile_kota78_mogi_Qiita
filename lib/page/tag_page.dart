@@ -11,7 +11,6 @@ class TagPage extends StatefulWidget {
 }
 
 class _TagPageState extends State<TagPage> {
-  QiitaTags qiitaTag = QiitaTags();
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +36,7 @@ class _TagPageState extends State<TagPage> {
           child: Column(
             children: [
               FutureBuilder<List<Tag>>(
-                future: QiitaTags.fetchTag(),
+                future: QiitaClient.fetchTag(),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     return TagListView(tags: snapshot.data);

@@ -11,6 +11,3 @@ class HexColor extends Color {
   HexColor(final String hexColor) : super(_getColorFromHex(hexColor));
 }
 
-class Constants {
-  String black = '#333333';
-}

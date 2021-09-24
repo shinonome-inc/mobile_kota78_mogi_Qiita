@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:qiita_app1/constants.dart';
 import 'package:qiita_app1/hex_color.dart';
 
 class SettingPage extends StatefulWidget {
@@ -61,7 +62,7 @@ class _SettingPageState extends State<SettingPage> {
                       Expanded(child: Container()),
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 20.0),
-                        child: Icon(Icons.arrow_forward_ios_rounded, color: HexColor('333333'),),
+                        child: Icon(Icons.arrow_forward_ios_rounded, color: HexColor(Constants.black),),
                       ),
                     ],
                   ),
@@ -70,7 +71,7 @@ class _SettingPageState extends State<SettingPage> {
               Divider(
                 height: 0,
                 thickness: 0.5,
-                color: HexColor('E0E0E0'),
+                color: HexColor(Constants.separatingLineColor),
                 indent: 20,
                 endIndent: 0,
               ),
@@ -96,7 +97,7 @@ class _SettingPageState extends State<SettingPage> {
                       Expanded(child: Container()),
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 20.0),
-                        child: Icon(Icons.arrow_forward_ios_rounded, color: HexColor('333333'),),
+                        child: Icon(Icons.arrow_forward_ios_rounded, color: HexColor(Constants.black),),
                       ),
                     ],
                   ),
@@ -105,7 +106,7 @@ class _SettingPageState extends State<SettingPage> {
               Divider(
                 height: 0,
                 thickness: 0.5,
-                color: HexColor('E0E0E0'),
+                color: HexColor(Constants.separatingLineColor),
                 indent: 20,
                 endIndent: 0,
               ),
@@ -116,12 +117,12 @@ class _SettingPageState extends State<SettingPage> {
                   children: [
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 20.0),
-                      child: Text("アプリバージョン", style: TextStyle(color: HexColor('333333'),),),
+                      child: Text("アプリバージョン", style: TextStyle(color: HexColor(Constants.black),),),
                     ),
                     Expanded(child: Container()),
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 20.0),
-                      child: Text("v1.0.0", style: TextStyle(color: HexColor('333333'), fontWeight: FontWeight.bold),),
+                      child: Text("v1.0.0", style: TextStyle(color: HexColor(Constants.black), fontWeight: FontWeight.bold),),
                     ),
                   ],
                 ),
@@ -129,7 +130,7 @@ class _SettingPageState extends State<SettingPage> {
               Divider(
                 height: 0,
                 thickness: 0.5,
-                color: HexColor('E0E0E0'),
+                color: HexColor(Constants.separatingLineColor),
                 indent: 20,
                 endIndent: 0,
               ),
@@ -161,7 +162,7 @@ class _SettingPageState extends State<SettingPage> {
               Divider(
                 height: 0,
                 thickness: 0.5,
-                color: HexColor('E0E0E0'),
+                color: HexColor(Constants.separatingLineColor),
                 indent: 20,
                 endIndent: 0,
               ),
