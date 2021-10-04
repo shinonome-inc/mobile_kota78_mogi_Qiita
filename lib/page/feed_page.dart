@@ -7,14 +7,13 @@ import 'package:qiita_app1/component/article_list.dart';
 import 'package:qiita_app1/hex_color.dart';
 
 class FeedPage extends StatefulWidget {
-  const FeedPage({Key key}) : super(key: key);
+  const FeedPage({Key? key}) : super(key: key);
   @override
   _FeedPageState createState() => _FeedPageState();
 }
 
 class _FeedPageState extends State<FeedPage> {
 
-  QiitaClient qiitaClient = QiitaClient();
   String onFieldSubmitted = "";
 
   //Kaoruさんのコード
@@ -96,33 +95,32 @@ class _FeedPageState extends State<FeedPage> {
           ),
         ),
         body: Center(
-          child: Column(
-            children: [
-              FutureBuilder<List<Article>>(
-                future: QiitaClient.fetchArticle(""),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    return Expanded(
-                      child: RefreshIndicator(
-                        onRefresh: () async {
-                          QiitaClient.fetchArticle(onFieldSubmitted);
-                        },
-                        child: ArticleListView(articles: snapshot.data),
-                      ),
-                    );
-                  }
-                  return Expanded(
-                    child: Container(
-                        alignment: Alignment.center,
-                        child: CircularProgressIndicator()
-                    ),
-                  );
-                },
-              ),
-            ],
+          child: FutureBuilder<List<Article>>(
+            future: QiitaClient.fetchArticle(""),
+            builder: (BuildContext context, AsyncSnapshot<List<Article>> snapshot) {
+              if (snapshot.hasData) {
+                return Expanded(
+                  child: RefreshIndicator(
+                    onRefresh: () async {
+                      QiitaClient.fetchArticle(onFieldSubmitted);
+                    },
+                    child: ArticleListView(articles: snapshot.data!),
+                  ),
+                );
+              }
+              if (snapshot.connectionState != ConnectionState.done) {
+                return Center(child: CircularProgressIndicator());
+              }
+              if (snapshot.hasError) {
+                return Text(snapshot.error.toString());
+              } else {
+                return Text("データが存在しません");
+              }
+            },
           ),
         ),
       ),
     );
   }
+
 }

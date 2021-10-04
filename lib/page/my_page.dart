@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:webview_flutter/webview_flutter.dart';
+import 'package:qiita_app1/model/user.dart';
+import 'package:qiita_app1/client/qiita_client.dart';
 
 class MyPage extends StatelessWidget {
   @override
@@ -20,9 +21,28 @@ class MyPage extends StatelessWidget {
           ),
         ),
         body: Center(
-          child: WebView(
-            initialUrl: 'https://qiita.com/ko_cha78',
-            javascriptMode: JavascriptMode.unrestricted,
+          child: FutureBuilder<User>(
+            future: QiitaClient.fetchUserDetail(),
+            builder: (BuildContext context, AsyncSnapshot<User> snapshot) {
+              if (snapshot.hasData) {
+                return Expanded(
+                  child: RefreshIndicator(
+                    onRefresh: () async {
+                      QiitaClient.fetchUserDetail();
+                    },
+                    child: Text(""),
+                  ),
+                );
+              }
+              if (snapshot.connectionState != ConnectionState.done) {
+                return CircularProgressIndicator();
+              }
+              if (snapshot.hasError) {
+                return Text(snapshot.error.toString());
+              } else {
+                return Text("データが存在しません");
+              }
+            },
           ),
         ),
       ),

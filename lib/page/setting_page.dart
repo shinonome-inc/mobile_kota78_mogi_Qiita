@@ -3,7 +3,7 @@ import 'package:qiita_app1/constants.dart';
 import 'package:qiita_app1/hex_color.dart';
 
 class SettingPage extends StatefulWidget {
-  const SettingPage({Key key}) : super(key: key);
+  const SettingPage({Key? key}) : super(key: key);
 
   @override
   _SettingPageState createState() => _SettingPageState();

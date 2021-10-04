@@ -9,7 +9,7 @@ import 'package:qiita_app1/constants.dart';
 
 class TagListView extends StatefulWidget {
   final List<Tag> tags;
-  TagListView({Key key, this.tags}) : super(key: key);
+  TagListView({Key? key, required this.tags}) : super(key: key);
 
   @override
   _TagListViewState createState() => _TagListViewState();
@@ -17,7 +17,7 @@ class TagListView extends StatefulWidget {
 
 class _TagListViewState extends State<TagListView> {
   QiitaClient qiitaClient = QiitaClient();
-  String tagName;
+  late String tagName;
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +43,7 @@ class _TagListViewState extends State<TagListView> {
                   clipBehavior: Clip.antiAlias,
                   child: InkWell(
                     onTap: () {
-                      tagName = tag.id;
+                      tagName = tag.id!;
                       print(tagName);
                       Navigator.push(
                         context,
@@ -67,7 +67,7 @@ class _TagListViewState extends State<TagListView> {
                               child: Container(
                                 height: 38,
                                 width: 38,
-                                child: Image.network(tag.iconUrl),
+                                child: Image.network(tag.iconUrl!),
                               ),
                             );
                           }
@@ -75,7 +75,7 @@ class _TagListViewState extends State<TagListView> {
                         SizedBox(
                           height: 20,
                           child: Text(
-                            tag.id,
+                            tag.id!,
                             style: TextStyle(
                               color: HexColor(Constants.black),
                               fontSize: 14,

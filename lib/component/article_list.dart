@@ -10,7 +10,7 @@ import 'package:intl/intl.dart';
 
 class ArticleListView extends StatefulWidget {
   final List<Article> articles;
-  ArticleListView({Key key, this.articles}) : super(key: key);
+  ArticleListView({Key? key,required this.articles}) : super(key: key);
 
   @override
   _ArticleListViewState createState() => _ArticleListViewState();
@@ -73,7 +73,7 @@ class _ArticleListViewState extends State<ArticleListView> {
               ListTile(
                 leading: CircleAvatar(
                   radius: 19.0,
-                  backgroundImage: NetworkImage(article.user.iconUrl),
+                  backgroundImage: NetworkImage(article.user.iconUrl!),
                 ),
                 title: Text(
                   article.title,
@@ -82,7 +82,7 @@ class _ArticleListViewState extends State<ArticleListView> {
                 ),
                 subtitle: Row(
                   children: [
-                    Text("@"+ article.user.id),
+                    Text("@"+ article.user.id!),
                     SizedBox(width: 5.0,),
                     Text("投稿日:" + DateFormat('yyyy/M/d').format(dateTime)),
                   ],

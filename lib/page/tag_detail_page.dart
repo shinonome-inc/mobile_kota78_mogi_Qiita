@@ -28,7 +28,7 @@ class _TagDetailPageState extends State<TagDetailPage> {
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: (() {
-          if (widget.tagName != null) {
+          if (widget.tagName == null) {
             return Text(
               widget.tagName,
               style: TextStyle(
@@ -67,7 +67,7 @@ class _TagDetailPageState extends State<TagDetailPage> {
                         onRefresh: () async {
                           QiitaClient.fetchTagDetail(widget.tagName);
                         },
-                        child: ArticleListView(articles: snapshot.data),
+                        child: ArticleListView(articles: snapshot.data!,),
                         //child: articleListView(snapshot.data),
                       ),
                     );

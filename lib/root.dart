@@ -6,7 +6,7 @@ import 'package:qiita_app1/page/setting_page.dart';
 
 
 class Root extends StatefulWidget {
-  const Root({Key key}) : super(key: key);
+  const Root({Key? key}) : super(key: key);
 
   @override
   _RootState createState() => _RootState();

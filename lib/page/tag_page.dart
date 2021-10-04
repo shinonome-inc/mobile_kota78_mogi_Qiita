@@ -5,7 +5,7 @@ import 'package:qiita_app1/model/tag.dart';
 import 'package:qiita_app1/component/tag_list.dart';
 
 class TagPage extends StatefulWidget {
-  const TagPage({Key key}) : super(key: key);
+  const TagPage({Key? key}) : super(key: key);
   @override
   _TagPageState createState() => _TagPageState();
 }
@@ -39,7 +39,7 @@ class _TagPageState extends State<TagPage> {
                 future: QiitaClient.fetchTag(),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
-                    return TagListView(tags: snapshot.data);
+                    return TagListView(tags: snapshot.requireData);
                   }
                   return Expanded(
                     child: Container(
