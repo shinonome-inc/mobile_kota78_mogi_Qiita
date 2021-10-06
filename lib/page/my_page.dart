@@ -34,29 +34,29 @@ class MyPage extends StatelessWidget {
             Center(
               child: Column(
                 children: [
-                  FutureBuilder<User>(
-                    future: QiitaClient.fetchMyProfile(),
-                    builder: (BuildContext context, AsyncSnapshot<User> snapshot) {
-                      if (snapshot.hasData) {
-                        return Expanded(
-                          child: MyPageView(userData: snapshot.data!,),
-                        );
-                      }
-                      if (snapshot.connectionState != ConnectionState.done) {
-                        return Expanded(
-                          child: Container(
-                              alignment: Alignment.center,
-                              child: CircularProgressIndicator()
-                          ),
-                        );
-                      }
-                      if (snapshot.hasError) {
-                        print(snapshot.error.toString());
-                        return Text(snapshot.error.toString());
-                      } else {
-                        return Text("データが存在しません");
-                      }
-                    },
+                  Expanded(
+                    child: FutureBuilder<User>(
+                      future: QiitaClient.fetchMyProfile(),
+                      builder: (BuildContext context, AsyncSnapshot<User> snapshot) {
+                        if (snapshot.hasData) {
+                          return MyPageView(userData: snapshot.data!,);
+                        }
+                        if (snapshot.connectionState != ConnectionState.done) {
+                          return Expanded(
+                            child: Container(
+                                alignment: Alignment.center,
+                                child: CircularProgressIndicator()
+                            ),
+                          );
+                        }
+                        if (snapshot.hasError) {
+                          print(snapshot.error.toString());
+                          return Text(snapshot.error.toString());
+                        } else {
+                          return Text("データが存在しません");
+                        }
+                      },
+                    ),
                   ),
                 ],
               ),
