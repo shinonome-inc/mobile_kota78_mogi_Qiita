@@ -95,28 +95,37 @@ class _FeedPageState extends State<FeedPage> {
           ),
         ),
         body: Center(
-          child: FutureBuilder<List<Article>>(
-            future: QiitaClient.fetchArticle(""),
-            builder: (BuildContext context, AsyncSnapshot<List<Article>> snapshot) {
-              if (snapshot.hasData) {
-                return Expanded(
-                  child: RefreshIndicator(
-                    onRefresh: () async {
-                      QiitaClient.fetchArticle(onFieldSubmitted);
-                    },
-                    child: ArticleListView(articles: snapshot.data!),
-                  ),
-                );
-              }
-              if (snapshot.connectionState != ConnectionState.done) {
-                return Center(child: CircularProgressIndicator());
-              }
-              if (snapshot.hasError) {
-                return Text(snapshot.error.toString());
-              } else {
-                return Text("データが存在しません");
-              }
-            },
+          child: Column(
+            children: [
+              FutureBuilder<List<Article>>(
+                future: QiitaClient.fetchArticle(""),
+                builder: (BuildContext context, AsyncSnapshot<List<Article>> snapshot) {
+                  if (snapshot.hasData) {
+                    return Expanded(
+                      child: RefreshIndicator(
+                        onRefresh: () async {
+                          QiitaClient.fetchArticle(onFieldSubmitted);
+                        },
+                        child: ArticleListView(articles: snapshot.data!),
+                      ),
+                    );
+                  }
+                  if (snapshot.connectionState != ConnectionState.done) {
+                    return Expanded(
+                      child: Container(
+                          alignment: Alignment.center,
+                          child: CircularProgressIndicator()
+                      ),
+                    );
+                  }
+                  if (snapshot.hasError) {
+                    return Text(snapshot.error.toString());
+                  } else {
+                    return Text("データが存在しません");
+                  }
+                },
+              ),
+            ],
           ),
         ),
       ),
