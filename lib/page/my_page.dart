@@ -42,11 +42,9 @@ class MyPage extends StatelessWidget {
                           return MyPageView(userData: snapshot.data!,);
                         }
                         if (snapshot.connectionState != ConnectionState.done) {
-                          return Expanded(
-                            child: Container(
-                                alignment: Alignment.center,
-                                child: CircularProgressIndicator()
-                            ),
+                          return Container(
+                              alignment: Alignment.center,
+                              child: CircularProgressIndicator()
                           );
                         }
                         if (snapshot.hasError) {
