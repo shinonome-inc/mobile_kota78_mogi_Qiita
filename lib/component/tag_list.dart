@@ -88,11 +88,11 @@ class _TagListViewState extends State<TagListView> {
                             children: [
                               Text(
                                 "記事件数:" + tag.itemsCount.toString(),
-                                style: TextStyle(color: HexColor('#828282'), fontSize: 12),
+                                style: TextStyle(color: HexColor(Constants.darkGrey), fontSize: 12),
                               ),
                               Text(
                                 "フォロワー数" + tag.followersCount.toString(),
-                                style: TextStyle(color: HexColor('#828282'), fontSize: 12),
+                                style: TextStyle(color: HexColor(Constants.darkGrey), fontSize: 12),
                               ),
                             ],
                           ),

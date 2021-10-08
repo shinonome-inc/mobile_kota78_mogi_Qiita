@@ -204,7 +204,7 @@ class _UserArticleListViewState extends State<UserArticleListView> {
               Divider(
                 height: 0,
                 thickness: 0.5,
-                color: HexColor("#B2B2B2"),
+                color: HexColor(Constants.grey),
                 indent: 16,
               ),
             ],

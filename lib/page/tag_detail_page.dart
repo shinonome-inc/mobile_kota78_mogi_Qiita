@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:qiita_app1/constants.dart';
 import 'package:qiita_app1/model/article.dart';
 import 'package:qiita_app1/hex_color.dart';
 import 'package:qiita_app1/component/article_list.dart';
@@ -42,12 +43,12 @@ class _TagDetailPageState extends State<TagDetailPage> {
         bottom: PreferredSize(
             preferredSize: const Size.fromHeight(28),
             child:Container(
-              color: HexColor("#F2F2F2"),
+              color: HexColor(Constants.whiteSmoke),
               child: Row(
                 children: [
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical:8.0),
-                    child: Text("投稿記事", style: TextStyle(color: HexColor("#828282"),),),
+                    child: Text("投稿記事", style: TextStyle(color: HexColor(Constants.darkGrey),),),
                   ),
                   Expanded(child: Container()),
                 ],

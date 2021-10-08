@@ -17,8 +17,8 @@ class MyPage extends StatelessWidget {
         appBar: AppBar(
           bottomOpacity: 0.0,
           elevation: 0.0,
-          backgroundColor: HexColor("#FFFFFF"),
-          shape: Border(bottom: BorderSide(color: HexColor("#B2B2B2"), width: 0.3)),
+          backgroundColor: HexColor(Constants.white),
+          shape: Border(bottom: BorderSide(color: HexColor(Constants.grey), width: 0.3)),
           title: Text(
             "MyPage",
             style: TextStyle(
@@ -30,7 +30,7 @@ class MyPage extends StatelessWidget {
         ),
         body: Stack(
           children: <Widget>[
-            Positioned.fill(child: Container(color: HexColor("#FFFFFF"),)),
+            Positioned.fill(child: Container(color: HexColor(Constants.white),)),
             Center(
               child: Column(
                 children: [
@@ -106,7 +106,7 @@ class MyPageView extends StatelessWidget {
                     child: Text(
                       "@"+ userData.id!,
                       style: TextStyle(
-                        color: HexColor("#828282"),
+                        color: HexColor(Constants.darkGrey),
                         fontSize: 12
                       ),
                     ),
@@ -150,7 +150,7 @@ class MyPageView extends StatelessWidget {
           ),
         ),
         Container(
-          color: HexColor("#F2F2F2"),
+          color: HexColor(Constants.whiteSmoke),
           height: 28,
           child: Row(
             children: [
@@ -159,7 +159,7 @@ class MyPageView extends StatelessWidget {
                 child: Text(
                   "投稿記事",
                   style: TextStyle(
-                    color: HexColor("#828282"),
+                    color: HexColor(Constants.darkGrey),
                     fontSize: 12,
                   ),
                 ),
