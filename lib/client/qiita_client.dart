@@ -6,7 +6,7 @@ import 'package:qiita_app1/model/user.dart';
 
 class QiitaClient {
 
-  static String accessToken ="";
+  static String accessToken ="727a80782b4e727e1a958abc6142bdf6499e36da";
 
   static Future<List<Article>> fetchArticle(String query) async {
     final _url = "https://qiita.com/api/v2/items?page=1&per_page=20&query=" +query+ "%3AQiita";

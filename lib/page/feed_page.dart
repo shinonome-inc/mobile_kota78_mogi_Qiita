@@ -117,6 +117,7 @@ class _FeedPageState extends State<FeedPage> {
                     }
                     if (snapshot.hasError) {
                       return Text(snapshot.error.toString());
+                      // todo: エラー画面実装
                     } else {
                       return Text("データが存在しません");
                     }

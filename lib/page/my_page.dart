@@ -50,6 +50,7 @@ class MyPage extends StatelessWidget {
                         if (snapshot.hasError) {
                           print(snapshot.error.toString());
                           return Text(snapshot.error.toString());
+                          // todo: エラー画面実装
                         } else {
                           return Text("データが存在しません");
                         }
@@ -75,77 +76,69 @@ class MyPageView extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Expanded(
-          flex: 256,
+        Padding(
+          padding: const EdgeInsets.fromLTRB(24, 24, 24, 8),
           child: Container(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(24, 0, 0, 16),
-                    child: CircleAvatar(
-                      radius: 40.0,
-                      backgroundImage: NetworkImage(userData.iconUrl!),
+            height: 256,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                CircleAvatar(
+                  radius: 40.0,
+                  backgroundImage: NetworkImage(userData.iconUrl!),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 16, 0, 4),
+                  child: Text(
+                    userData.userName!,
+                    style: TextStyle(
+                      color: HexColor(Constants.black),
+                      fontSize: 20
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(24, 0, 0, 0),
-                    child: Text(
-                      userData.userName!,
-                      style: TextStyle(
-                        color: HexColor(Constants.black),
-                        fontSize: 20
-                      ),
-                    ),
+                ),
+                Text(
+                  "@"+ userData.id!,
+                  style: TextStyle(
+                    color: HexColor(Constants.darkGrey),
+                    fontSize: 12
                   ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(24, 0, 0, 0),
-                    child: Text(
-                      "@"+ userData.id!,
-                      style: TextStyle(
-                        color: HexColor(Constants.darkGrey),
-                        fontSize: 12
-                      ),
-                    ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 16, 0, 16),
+                  child: Text(
+                    userData.description != null ? userData.description! : "",
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(24, 16, 0, 16),
-                    child: Text(
-                      userData.description != null ? userData.description! : "",
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(24, 0, 0, 0),
-                    child: RichText(
-                        text: TextSpan(
-                            style: TextStyle(
-                                color: HexColor(Constants.black)
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 8),
+                  child: RichText(
+                      text: TextSpan(
+                          style: TextStyle(
+                              color: HexColor(Constants.black)
+                          ),
+                          children: [
+                            TextSpan(
+                              text: userData.followeesCount.toString(),
                             ),
-                            children: [
-                              TextSpan(
-                                text: userData.followeesCount.toString(),
-                              ),
-                              TextSpan(
-                                text: "フォロー中",
-                              ),
-                              WidgetSpan(child: SizedBox(width: 8,)),
-                              TextSpan(
-                                text: userData.followersCount.toString(),
-                              ),
-                              TextSpan(
-                                text: "フォロワー",
-                              ),
-                            ]
-                        )
-                    ),
+                            TextSpan(
+                              text: "フォロー中",
+                            ),
+                            WidgetSpan(child: SizedBox(width: 8,)),
+                            TextSpan(
+                              text: userData.followersCount.toString(),
+                            ),
+                            TextSpan(
+                              text: "フォロワー",
+                            ),
+                          ]
+                      )
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),
@@ -155,7 +148,7 @@ class MyPageView extends StatelessWidget {
           child: Row(
             children: [
               Padding(
-                padding: const EdgeInsets.fromLTRB(12, 0, 0, 0),
+                padding: const EdgeInsets.fromLTRB(12, 0, 12, 0),
                 child: Text(
                   "投稿記事",
                   style: TextStyle(
@@ -168,7 +161,6 @@ class MyPageView extends StatelessWidget {
           ),
         ),
         Expanded(
-          flex: 361,
           child: FutureBuilder<List<Article>>(
             future: QiitaClient.fetchMyArticle(),
             builder: (BuildContext context, AsyncSnapshot<List<Article>> snapshot) {
@@ -178,7 +170,7 @@ class MyPageView extends StatelessWidget {
                       QiitaClient.fetchMyArticle();
                       },
                     child: (() {
-                      if (snapshot.data!.isEmpty == true) {
+                      if (snapshot.data?.isEmpty ?? true) {
                         return Center(child: Text("まだ投稿がありません"));
                       } else {
                         return UserArticleListView(articles: snapshot.data!);
