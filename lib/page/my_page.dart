@@ -101,7 +101,7 @@ class MyPageView extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.fromLTRB(0, 16, 0, 4),
                   child: Text(
-                    userData.userName ?? "タイトル未設定",
+                    userData.userName ?? "ユーザー名未設定",
                     style: TextStyle(
                       color: HexColor(Constants.black),
                       fontSize: 20
@@ -109,7 +109,6 @@ class MyPageView extends StatelessWidget {
                   ),
                 ),
                 Text(
-                 // "@ ${userData.id ?? "id未設定"}",
                   userData.id ?? "id未設定" + "@",
                   style: TextStyle(
                     color: HexColor(Constants.darkGrey),
