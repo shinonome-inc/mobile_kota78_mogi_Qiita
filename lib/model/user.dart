@@ -1,7 +1,7 @@
 class User {
   final String? id;
   final String? iconUrl;
-  final String?userName;
+  final String? userName;
   final String? description;
   final int? followeesCount;
   final int? followersCount;

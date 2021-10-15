@@ -84,14 +84,24 @@ class MyPageView extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                userData.iconUrl != null ?
                 CircleAvatar(
                   radius: 40.0,
                   backgroundImage: NetworkImage(userData.iconUrl!),
+                ) :
+                CircleAvatar(
+                  radius: 40.0,
+                  child: Icon(
+                    Icons.person,
+                    color: Colors.white,
+                    size: 40,
+                  ),
+                  backgroundColor: Colors.grey,
                 ),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(0, 16, 0, 4),
                   child: Text(
-                    userData.userName!,
+                    userData.userName ?? "タイトル未設定",
                     style: TextStyle(
                       color: HexColor(Constants.black),
                       fontSize: 20
@@ -99,7 +109,8 @@ class MyPageView extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  "@"+ userData.id!,
+                 // "@ ${userData.id ?? "id未設定"}",
+                  userData.id ?? "id未設定" + "@",
                   style: TextStyle(
                     color: HexColor(Constants.darkGrey),
                     fontSize: 12
