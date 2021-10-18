@@ -79,7 +79,6 @@ class MyPageView extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.fromLTRB(24, 24, 24, 8),
           child: Container(
-            height: 256,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -123,30 +122,27 @@ class MyPageView extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 8),
-                  child: RichText(
-                      text: TextSpan(
-                          style: TextStyle(
-                              color: HexColor(Constants.black)
+                RichText(
+                    text: TextSpan(
+                        style: TextStyle(
+                            color: HexColor(Constants.black)
+                        ),
+                        children: [
+                          TextSpan(
+                            text: userData.followeesCount.toString(),
                           ),
-                          children: [
-                            TextSpan(
-                              text: userData.followeesCount.toString(),
-                            ),
-                            TextSpan(
-                              text: "フォロー中",
-                            ),
-                            WidgetSpan(child: SizedBox(width: 8,)),
-                            TextSpan(
-                              text: userData.followersCount.toString(),
-                            ),
-                            TextSpan(
-                              text: "フォロワー",
-                            ),
-                          ]
-                      )
-                  ),
+                          TextSpan(
+                            text: "フォロー中",
+                          ),
+                          WidgetSpan(child: SizedBox(width: 8,)),
+                          TextSpan(
+                            text: userData.followersCount.toString(),
+                          ),
+                          TextSpan(
+                            text: "フォロワー",
+                          ),
+                        ]
+                    )
                 ),
               ],
             ),
