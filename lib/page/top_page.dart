@@ -4,10 +4,11 @@ import 'package:qiita_app1/root.dart';
 
 
 class TopPage extends StatefulWidget {
-  TopPage({Key key, this.title}) : super(key: key);
+  TopPage(
+      {Key? key}
+      ) : super(key: key);
 
 
-  final String title;
 
   @override
   _TopPageState createState() => _TopPageState();

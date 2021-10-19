@@ -6,7 +6,7 @@ class Article {
   final String url;
   final User user;
 
-  Article({this.updatedAt, this.title, this.url, this.user});
+  Article({required this.updatedAt, required this.title, required this.url, required this.user});
 
   factory Article.fromJson(Map<String, dynamic> json) {
     return Article(

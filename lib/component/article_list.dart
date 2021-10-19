@@ -10,12 +10,11 @@ import 'package:intl/intl.dart';
 
 class ArticleListView extends StatefulWidget {
   final List<Article> articles;
-  ArticleListView({Key key, this.articles}) : super(key: key);
+  ArticleListView({Key? key,required this.articles}) : super(key: key);
 
   @override
   _ArticleListViewState createState() => _ArticleListViewState();
 }
-
 class _ArticleListViewState extends State<ArticleListView> {
   QiitaClient qiitaClient = QiitaClient();
 
@@ -73,7 +72,7 @@ class _ArticleListViewState extends State<ArticleListView> {
               ListTile(
                 leading: CircleAvatar(
                   radius: 19.0,
-                  backgroundImage: NetworkImage(article.user.iconUrl),
+                  backgroundImage: NetworkImage(article.user.iconUrl!),
                 ),
                 title: Text(
                   article.title,
@@ -82,7 +81,7 @@ class _ArticleListViewState extends State<ArticleListView> {
                 ),
                 subtitle: Row(
                   children: [
-                    Text("@"+ article.user.id),
+                    Text("@"+ article.user.id!),
                     SizedBox(width: 5.0,),
                     Text("投稿日:" + DateFormat('yyyy/M/d').format(dateTime)),
                   ],
@@ -103,6 +102,110 @@ class _ArticleListViewState extends State<ArticleListView> {
                 thickness: 0.5,
                 color: HexColor(Constants.separatingLineColor),
                 indent: 70,
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+}
+
+
+class UserArticleListView extends StatefulWidget {
+  final List<Article> articles;
+  UserArticleListView({Key? key,required this.articles}) : super(key: key);
+
+  @override
+  _UserArticleListViewState createState() => _UserArticleListViewState();
+}
+class _UserArticleListViewState extends State<UserArticleListView> {
+  QiitaClient qiitaClient = QiitaClient();
+
+  Widget _modal (Article article){
+    return Container(
+      height: MediaQuery.of(context).size.height * 0.8,
+      child: Column(
+        children: <Widget>[
+          Container(
+            height: 60,
+            decoration: BoxDecoration(
+              color: Colors.grey[300],
+              borderRadius: const BorderRadius.only(
+                topRight: const Radius.circular(20),
+                topLeft: const Radius.circular(20),
+              ),
+            ),
+            child: Align(alignment: Alignment.center,
+              child: Text("Article",
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                      fontFamily: 'Pacifico'
+                  )
+              ),
+            ),
+          ),
+          Expanded(
+            child: Container(
+              color: Colors.white,
+              child:Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: WebView(initialUrl: article.url,)
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      itemCount: widget.articles.length,
+      itemBuilder: (BuildContext context, int index) {
+        final article = widget.articles[index];
+        DateTime dateTime = DateTime.parse(article.updatedAt);
+        return Card(
+          elevation: 0,
+          margin: EdgeInsets.all(0),
+          child: Column(
+            children: [
+              ListTile(
+                title: Text(
+                  article.title,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                      fontSize: 14,
+                      color: HexColor(Constants.black),
+                  ),
+                ),
+                subtitle: Row(
+                  children: [
+                    Text("@"+ article.user.id!),
+                    SizedBox(width: 5.0,),
+                    Text("投稿日:" + DateFormat('yyyy/M/d').format(dateTime)),
+                  ],
+                ),
+                onTap: () {
+                  showModalBottomSheet(
+                      enableDrag: true,
+                      backgroundColor: Colors.transparent,
+                      context: context,
+                      isScrollControlled: true,
+                      builder: (BuildContext context) {
+                        return _modal(article);
+                      });
+                },
+              ),
+              Divider(
+                height: 0,
+                thickness: 0.5,
+                color: HexColor(Constants.grey),
+                indent: 16,
               ),
             ],
           ),
