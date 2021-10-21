@@ -34,9 +34,19 @@ class UserListView extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 16.0),
                       child: Row(
                         children: [
+                          user.iconUrl != null ?
                           CircleAvatar(
                             radius: 16.0,
                             backgroundImage: NetworkImage(user.iconUrl!),
+                          ) :
+                          CircleAvatar(
+                            radius: 16.0,
+                            child: Icon(
+                              Icons.person,
+                              color: Colors.white,
+                              size: 16,
+                            ),
+                            backgroundColor: Colors.grey,
                           ),
                           SizedBox(width: 8.0,),
                           Column(
