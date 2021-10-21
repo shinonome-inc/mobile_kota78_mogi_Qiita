@@ -95,6 +95,7 @@ class _FeedPageState extends State<FeedPage> {
           ),
         ),
         body: Center(
+
           child: Column(
             children: [
               Expanded(

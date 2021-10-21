@@ -99,4 +99,40 @@ class QiitaClient {
       throw Exception('Failed to load article');
     }
   }
+
+  static Future<List<User>> fetchFollowers() async {
+    final _url = "https://qiita.com/api/v2/users/ko_cha78/followees";
+    final response = await http.get(
+      Uri.parse(_url),
+      headers: {
+        'Authorization': 'Bearer $accessToken',
+      },
+    );
+    if (response.statusCode == 200) {
+      final List<dynamic> followersJsonArray = json.decode(response.body);
+      print(_url);
+      print(response.body);
+      return followersJsonArray.map((json) => User.fromJson(json)).toList();
+    } else {
+      throw Exception('Failed to load followers');
+    }
+  }
+
+  static Future<List<User>> fetchFollowees() async {
+    final _url = "https://qiita.com/api/v2/users/ko_cha78/followers";
+    final response = await http.get(
+      Uri.parse(_url),
+      headers: {
+        'Authorization': 'Bearer $accessToken',
+      },
+    );
+    if (response.statusCode == 200) {
+      final List<dynamic> followeesJsonArray = json.decode(response.body);
+      print(_url);
+      print(response.body);
+      return followeesJsonArray.map((json) => User.fromJson(json)).toList();
+    } else {
+      throw Exception('Failed to load followees');
+    }
+  }
 }

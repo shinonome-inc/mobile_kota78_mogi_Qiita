@@ -5,7 +5,16 @@ class User {
   final String? description;
   final int? followeesCount;
   final int? followersCount;
-  User({required this.id, required this.iconUrl, required this.userName, required this.description, required this.followersCount, required this.followeesCount});
+  final int? itemsCount;
+  User({
+    required this.id,
+    required this.iconUrl,
+    required this.userName,
+    required this.description,
+    required this.followersCount,
+    required this.followeesCount,
+    required this.itemsCount
+  });
   factory User.fromJson(Map<dynamic, dynamic> json) {
     return User(
       id: (json['id']),
@@ -14,6 +23,7 @@ class User {
       description: json['description'],
       followeesCount: json['followees_count'],
       followersCount: json['followers_count'],
+      itemsCount: json['items_count']
     );
   }
 }

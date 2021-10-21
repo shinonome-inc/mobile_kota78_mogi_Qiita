@@ -5,6 +5,7 @@ import 'package:qiita_app1/hex_color.dart';
 import 'package:qiita_app1/model/user.dart';
 import 'package:qiita_app1/client/qiita_client.dart';
 import 'package:qiita_app1/model/article.dart';
+import 'package:qiita_app1/page/follow_follower_page.dart';
 
 class MyPage extends StatelessWidget {
 
@@ -122,27 +123,56 @@ class MyPageView extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
-                RichText(
-                    text: TextSpan(
-                        style: TextStyle(
-                            color: HexColor(Constants.black)
-                        ),
-                        children: [
-                          TextSpan(
-                            text: userData.followeesCount.toString(),
-                          ),
-                          TextSpan(
-                            text: "フォロー中",
-                          ),
-                          WidgetSpan(child: SizedBox(width: 8,)),
-                          TextSpan(
-                            text: userData.followersCount.toString(),
-                          ),
-                          TextSpan(
-                            text: "フォロワー",
-                          ),
-                        ]
+                Row(
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => FollowFollowerPage(false)),
+                        );
+                      },
+                      child: RichText(
+                          text: TextSpan(
+                              style: TextStyle(
+                                  color: HexColor(Constants.black)
+                              ),
+                              children: [
+                                TextSpan(
+                                  text: userData.followeesCount.toString(),
+                                ),
+                                TextSpan(
+                                  text: "フォロー中",
+                                ),
+                              ]
+                          )
+                      ),
+                    ),
+                    SizedBox(width: 8.0,),
+                    InkWell(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => FollowFollowerPage(true)),
+                        );
+                      },
+                      child: RichText(
+                          text: TextSpan(
+                              style: TextStyle(
+                                  color: HexColor(Constants.black)
+                              ),
+                              children: [
+                                TextSpan(
+                                  text: userData.followersCount.toString(),
+                                ),
+                                TextSpan(
+                                  text: "フォロワー",
+                                ),
+                              ]
+                          )
+                      ),
                     )
+                  ],
                 ),
               ],
             ),
