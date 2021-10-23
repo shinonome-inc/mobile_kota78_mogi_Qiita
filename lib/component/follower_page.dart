@@ -5,16 +5,18 @@ import 'package:qiita_app1/client/qiita_client.dart';
 import 'package:qiita_app1/component/user_list.dart';
 
 class FollowerPage extends StatelessWidget {
+  final String userId;
+  FollowerPage(this.userId);
   @override
   Widget build(BuildContext context) {
     return Expanded(
       child: FutureBuilder<List<User>>(
-        future: QiitaClient.fetchFollowers(),
+        future: QiitaClient.fetchFollowers(userId),
         builder: (BuildContext context, AsyncSnapshot<List<User>> snapshot) {
           if (snapshot.hasData) {
             return RefreshIndicator(
               onRefresh: () async {
-                QiitaClient.fetchFollowers();
+                QiitaClient.fetchFollowers(userId);
               },
               child: (() {
                 if (snapshot.data?.isEmpty ?? true) {

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:qiita_app1/model/user.dart';
 import 'package:qiita_app1/hex_color.dart';
 import 'package:qiita_app1/constants.dart';
+import 'package:qiita_app1/page/user_page.dart';
 
 class UserListView extends StatelessWidget {
   final List<User> users;
@@ -19,7 +20,12 @@ class UserListView extends StatelessWidget {
             borderRadius: BorderRadius.all(Radius.circular(8.0)),
             clipBehavior: Clip.antiAlias,
             child: InkWell(
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => new UserPage(user.id ?? "", user.userName ?? "")),
+                );
+              },
               child: Container(
                 decoration: BoxDecoration(
                   border: Border.all(
@@ -54,7 +60,7 @@ class UserListView extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                user.userName == "" ? "NoName" : user.userName!,
+                                user.userName == "" ? "" : user.userName!,
                                 style: TextStyle(
                                   color: HexColor(Constants.black),
                                   fontSize: 14,

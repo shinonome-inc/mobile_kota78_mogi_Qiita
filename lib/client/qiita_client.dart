@@ -100,8 +100,8 @@ class QiitaClient {
     }
   }
 
-  static Future<List<User>> fetchFollowers() async {
-    final _url = "https://qiita.com/api/v2/users/ko_cha78/followees";
+  static Future<List<User>> fetchFollowers(String userName) async {
+    final _url = "https://qiita.com/api/v2/users/$userName/followees";
     final response = await http.get(
       Uri.parse(_url),
       headers: {
@@ -118,8 +118,8 @@ class QiitaClient {
     }
   }
 
-  static Future<List<User>> fetchFollowees() async {
-    final _url = "https://qiita.com/api/v2/users/ko_cha78/followers";
+  static Future<List<User>> fetchFollowees(String userName) async {
+    final _url = "https://qiita.com/api/v2/users/$userName/followers";
     final response = await http.get(
       Uri.parse(_url),
       headers: {
@@ -133,6 +133,44 @@ class QiitaClient {
       return followeesJsonArray.map((json) => User.fromJson(json)).toList();
     } else {
       throw Exception('Failed to load followees');
+    }
+  }
+
+  static Future<User> fetchUserProfile(String userId) async {
+    final _url = "https://qiita.com/api/v2/users/$userId";
+    final response = await http.get(
+      Uri.parse(_url),
+      headers: {
+        'Authorization': 'Bearer $accessToken',
+      },
+    );
+    print(response.statusCode.toString());
+    if (response.statusCode == 200) {
+      print(_url);
+      Map userMap = json.decode(response.body);
+      var user = new User.fromJson(userMap);
+      print(response.body);
+      return user;
+    } else {
+      throw Exception('Failed to load article');
+    }
+  }
+
+  static Future<List<Article>> fetchUserArticle(String userId) async {
+    final _url = "https://qiita.com/api/v2/items?page=1&per_page=20&query=" +userId+ "%3AQiita";
+    final response = await http.get(
+      Uri.parse(_url),
+      headers: {
+        'Authorization': 'Bearer $accessToken',
+      },
+    );
+    if (response.statusCode == 200) {
+      final List<dynamic> userArticleJsonArray = json.decode(response.body);
+      print(_url);
+      print(response.body);
+      return userArticleJsonArray.map((json) => Article.fromJson(json)).toList();
+    } else {
+      throw Exception('Failed to load article');
     }
   }
 }

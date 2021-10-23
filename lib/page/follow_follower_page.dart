@@ -5,9 +5,9 @@ import 'package:qiita_app1/component/follower_page.dart';
 import 'package:qiita_app1/hex_color.dart';
 
 class FollowFollowerPage extends StatefulWidget {
-
   final bool isFollowerTapped;
-  FollowFollowerPage(this.isFollowerTapped);
+  final String userId, userName;
+  FollowFollowerPage(this.isFollowerTapped, this.userId, this.userName);
 
   @override
   _FollowFollowerPageState createState() => _FollowFollowerPageState();
@@ -32,7 +32,7 @@ class _FollowFollowerPageState extends State<FollowFollowerPage> {
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: Text(
-          "ko_cha78",
+          widget.userName,
           style: TextStyle(
             color: Colors.black,
             fontSize: 15.0,
@@ -67,9 +67,9 @@ class _FollowFollowerPageState extends State<FollowFollowerPage> {
           ),
           (() {
             if (switchValue == true) {
-              return FollowerPage();
+              return FollowPage(widget.userId);
             } else {
-              return FollowPage();
+              return FollowerPage(widget.userId);
             }
           })(),
 
