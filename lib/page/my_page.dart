@@ -9,8 +9,6 @@ import 'package:qiita_app1/page/follow_follower_page.dart';
 
 class MyPage extends StatelessWidget {
 
-
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -129,7 +127,7 @@ class MyPageView extends StatelessWidget {
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => new FollowFollowerPage(false, userData.userName ?? "", userData.id ?? "")),
+                          MaterialPageRoute(builder: (context) => new FollowFollowerPage(false, userData.id ?? "", userData.userName ?? "")),
                         );
                       },
                       child: RichText(
@@ -153,7 +151,7 @@ class MyPageView extends StatelessWidget {
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => new FollowFollowerPage(true, userData.userName ?? "", userData.id ?? "")),
+                          MaterialPageRoute(builder: (context) => new FollowFollowerPage(true, userData.id ?? "", userData.userName ?? "")),
                         );
                       },
                       child: RichText(

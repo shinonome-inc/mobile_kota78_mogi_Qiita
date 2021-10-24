@@ -100,8 +100,8 @@ class QiitaClient {
     }
   }
 
-  static Future<List<User>> fetchFollowers(String userName) async {
-    final _url = "https://qiita.com/api/v2/users/$userName/followees";
+  static Future<List<User>> fetchFollowers(String userId) async {
+    final _url = "https://qiita.com/api/v2/users/$userId/followees";
     final response = await http.get(
       Uri.parse(_url),
       headers: {
@@ -118,8 +118,8 @@ class QiitaClient {
     }
   }
 
-  static Future<List<User>> fetchFollowees(String userName) async {
-    final _url = "https://qiita.com/api/v2/users/$userName/followers";
+  static Future<List<User>> fetchFollowees(String userId) async {
+    final _url = "https://qiita.com/api/v2/users/$userId/followers";
     final response = await http.get(
       Uri.parse(_url),
       headers: {
