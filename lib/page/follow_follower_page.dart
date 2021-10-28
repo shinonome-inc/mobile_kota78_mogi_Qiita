@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:qiita_app1/component/follow_page.dart';
 import 'package:qiita_app1/component/follower_page.dart';
+import 'package:qiita_app1/constants.dart';
 import 'package:qiita_app1/hex_color.dart';
 
 class FollowFollowerPage extends StatefulWidget {
@@ -50,8 +51,20 @@ class _FollowFollowerPageState extends State<FollowFollowerPage> {
                   child: CupertinoSlidingSegmentedControl<bool>(
                     groupValue: switchValue,
                     children: {
-                        true: Text("フォロワー"),
-                        false: Text("フォロー中"),
+                        true: Text(
+                          "フォロワー",
+                          style: TextStyle(
+                            fontWeight: switchValue == true ? FontWeight.w600 : FontWeight.w500,
+                            color: HexColor(Constants.darkBlack),
+                          ),
+                        ),
+                        false: Text(
+                          "フォロー中",
+                          style: TextStyle(
+                            fontWeight: switchValue == false ? FontWeight.w600 : FontWeight.w500,
+                            color: HexColor(Constants.darkBlack),
+                          ),
+                        ),
                       },
                       onValueChanged: (switchValue) {
                         print(switchValue);

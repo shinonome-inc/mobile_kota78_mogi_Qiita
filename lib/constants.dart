@@ -5,5 +5,5 @@ class Constants {
   static String grey = "#B2B2B2";
   static String darkGrey = "#828282";
   static String whiteSmoke = "#F2F2F2";
-
+  static String darkBlack = "#000000";
 }

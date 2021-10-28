@@ -23,7 +23,7 @@ class UserListView extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => new UserPage(user.id ?? "", user.userName ?? "")),
+                  MaterialPageRoute(builder: (context) => UserPage(user.id ?? "", user.userName ?? "")),
                 );
               },
               child: Container(
@@ -91,17 +91,23 @@ class UserListView extends StatelessWidget {
                         ),
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-                      child: Text(
-                        user.description ?? "",
-                        style: TextStyle(
-                            color: HexColor(Constants.darkGrey),
-                            fontSize: 12,
-                            fontWeight: FontWeight.w500
+                    Visibility(
+                      visible: (user.description?.isNotEmpty ?? false),
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(16.0, 8.0, 16.0, 0),
+                        child: Text(
+                          user.description ?? "",
+                          maxLines: 3,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                              color: HexColor(Constants.darkGrey),
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500
+                          ),
                         ),
                       ),
-                    )
+                    ),
+                    SizedBox(height: 8.0,)
                   ],
                 ),
               ),

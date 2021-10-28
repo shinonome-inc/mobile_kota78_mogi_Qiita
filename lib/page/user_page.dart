@@ -112,8 +112,8 @@ class UserPageView extends StatelessWidget {
                     ),
                   ),
                 ),
-                Text(
-                  userData.id ?? "id未設定" + "@",
+                Text("@${userData.id ?? "id未設定"}",
+
                   style: TextStyle(
                     color: HexColor(Constants.darkGrey),
                     fontSize: 12
@@ -133,20 +133,27 @@ class UserPageView extends StatelessWidget {
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => new FollowFollowerPage(false, userData.id ?? "", userData.userName ?? "")),
+                          MaterialPageRoute(builder: (context) => FollowFollowerPage(false, userData.id ?? "", userData.userName ?? "")),
                         );
                       },
                       child: RichText(
                           text: TextSpan(
                               style: TextStyle(
-                                  color: HexColor(Constants.black)
+                                fontSize: 12,
+                                color: HexColor(Constants.black),
                               ),
                               children: [
                                 TextSpan(
                                   text: userData.followeesCount.toString(),
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w700,
+                                  ),
                                 ),
                                 TextSpan(
                                   text: "フォロー中",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                  ),
                                 ),
                               ]
                           )
@@ -157,20 +164,27 @@ class UserPageView extends StatelessWidget {
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => new FollowFollowerPage(true, userData.id ?? "", userData.userName ?? "")),
+                          MaterialPageRoute(builder: (context) => FollowFollowerPage(true, userData.id ?? "", userData.userName ?? "")),
                         );
                       },
                       child: RichText(
                           text: TextSpan(
                               style: TextStyle(
-                                  color: HexColor(Constants.black)
+                                fontSize: 12,
+                                color: HexColor(Constants.black),
                               ),
                               children: [
                                 TextSpan(
                                   text: userData.followersCount.toString(),
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w700,
+                                  ),
                                 ),
                                 TextSpan(
                                   text: "フォロワー",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                  ),
                                 ),
                               ]
                           )

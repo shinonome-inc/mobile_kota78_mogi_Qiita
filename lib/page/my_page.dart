@@ -107,7 +107,7 @@ class MyPageView extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  userData.id ?? "id未設定" + "@",
+                  "@${userData.id ?? "id未設定"}",
                   style: TextStyle(
                     color: HexColor(Constants.darkGrey),
                     fontSize: 12
@@ -133,14 +133,21 @@ class MyPageView extends StatelessWidget {
                       child: RichText(
                           text: TextSpan(
                               style: TextStyle(
+                                  fontSize: 12,
                                   color: HexColor(Constants.black)
                               ),
                               children: [
                                 TextSpan(
                                   text: userData.followeesCount.toString(),
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w700,
+                                  ),
                                 ),
                                 TextSpan(
                                   text: "フォロー中",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                  ),
                                 ),
                               ]
                           )
@@ -162,9 +169,15 @@ class MyPageView extends StatelessWidget {
                               children: [
                                 TextSpan(
                                   text: userData.followersCount.toString(),
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w700,
+                                  ),
                                 ),
                                 TextSpan(
                                   text: "フォロワー",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                  ),
                                 ),
                               ]
                           )
