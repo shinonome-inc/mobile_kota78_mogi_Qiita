@@ -7,19 +7,24 @@ import 'package:qiita_app1/client/qiita_client.dart';
 import 'package:qiita_app1/model/article.dart';
 import 'package:qiita_app1/page/follow_follower_page.dart';
 
-class MyPage extends StatelessWidget {
-
+class UserPage extends StatelessWidget {
+  final String userId, userName;
+  UserPage(this.userId, this.userName);
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          bottomOpacity: 0.0,
           elevation: 0.0,
+          bottomOpacity: 0.0,
           backgroundColor: HexColor(Constants.white),
+          leading: BackButton(
+            color: HexColor("#468300"),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
           shape: Border(bottom: BorderSide(color: HexColor(Constants.grey), width: 0.3)),
           title: Text(
-            "MyPage",
+            userName,
             style: TextStyle(
               color: Colors.black,
               fontSize: 15.0,
@@ -35,10 +40,10 @@ class MyPage extends StatelessWidget {
                 children: [
                   Expanded(
                     child: FutureBuilder<User>(
-                      future: QiitaClient.fetchMyProfile(),
+                      future: QiitaClient.fetchUserProfile(userId),
                       builder: (BuildContext context, AsyncSnapshot<User> snapshot) {
                         if (snapshot.hasData) {
-                          return MyPageView(userData: snapshot.data!,);
+                          return UserPageView(userData: snapshot.data!, userId: userId,);
                         }
                         if (snapshot.connectionState != ConnectionState.done) {
                           return Container(
@@ -66,9 +71,10 @@ class MyPage extends StatelessWidget {
   }
 }
 
-class MyPageView extends StatelessWidget {
+class UserPageView extends StatelessWidget {
+  final String userId;
   final User userData;
-  MyPageView({Key? key,required this.userData}) : super(key: key);
+  UserPageView({Key? key,required this.userData, required this.userId}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -106,8 +112,8 @@ class MyPageView extends StatelessWidget {
                     ),
                   ),
                 ),
-                Text(
-                  "@${userData.id ?? "id未設定"}",
+                Text("@${userData.id ?? "id未設定"}",
+
                   style: TextStyle(
                     color: HexColor(Constants.darkGrey),
                     fontSize: 12
@@ -127,14 +133,14 @@ class MyPageView extends StatelessWidget {
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => new FollowFollowerPage(false, userData.id ?? "", userData.userName ?? "")),
+                          MaterialPageRoute(builder: (context) => FollowFollowerPage(false, userData.id ?? "", userData.userName ?? "")),
                         );
                       },
                       child: RichText(
                           text: TextSpan(
                               style: TextStyle(
-                                  fontSize: 12,
-                                  color: HexColor(Constants.black)
+                                fontSize: 12,
+                                color: HexColor(Constants.black),
                               ),
                               children: [
                                 TextSpan(
@@ -158,13 +164,14 @@ class MyPageView extends StatelessWidget {
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => new FollowFollowerPage(true, userData.id ?? "", userData.userName ?? "")),
+                          MaterialPageRoute(builder: (context) => FollowFollowerPage(true, userData.id ?? "", userData.userName ?? "")),
                         );
                       },
                       child: RichText(
                           text: TextSpan(
                               style: TextStyle(
-                                  color: HexColor(Constants.black)
+                                fontSize: 12,
+                                color: HexColor(Constants.black),
                               ),
                               children: [
                                 TextSpan(
@@ -209,7 +216,7 @@ class MyPageView extends StatelessWidget {
         ),
         Expanded(
           child: FutureBuilder<List<Article>>(
-            future: QiitaClient.fetchMyArticle(),
+            future: QiitaClient.fetchUserArticle(userId),
             builder: (BuildContext context, AsyncSnapshot<List<Article>> snapshot) {
               if (snapshot.hasData) {
                   return RefreshIndicator(

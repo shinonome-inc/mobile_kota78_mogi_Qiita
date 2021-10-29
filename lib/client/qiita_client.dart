@@ -99,4 +99,78 @@ class QiitaClient {
       throw Exception('Failed to load article');
     }
   }
+
+  static Future<List<User>> fetchFollowers(String userId) async {
+    final _url = "https://qiita.com/api/v2/users/$userId/followees";
+    final response = await http.get(
+      Uri.parse(_url),
+      headers: {
+        'Authorization': 'Bearer $accessToken',
+      },
+    );
+    if (response.statusCode == 200) {
+      final List<dynamic> followersJsonArray = json.decode(response.body);
+      print(_url);
+      print(response.body);
+      return followersJsonArray.map((json) => User.fromJson(json)).toList();
+    } else {
+      throw Exception('Failed to load followers');
+    }
+  }
+
+  static Future<List<User>> fetchFollowees(String userId) async {
+    final _url = "https://qiita.com/api/v2/users/$userId/followers";
+    final response = await http.get(
+      Uri.parse(_url),
+      headers: {
+        'Authorization': 'Bearer $accessToken',
+      },
+    );
+    if (response.statusCode == 200) {
+      final List<dynamic> followeesJsonArray = json.decode(response.body);
+      print(_url);
+      print(response.body);
+      return followeesJsonArray.map((json) => User.fromJson(json)).toList();
+    } else {
+      throw Exception('Failed to load followees');
+    }
+  }
+
+  static Future<User> fetchUserProfile(String userId) async {
+    final _url = "https://qiita.com/api/v2/users/$userId";
+    final response = await http.get(
+      Uri.parse(_url),
+      headers: {
+        'Authorization': 'Bearer $accessToken',
+      },
+    );
+    print(response.statusCode.toString());
+    if (response.statusCode == 200) {
+      print(_url);
+      Map userMap = json.decode(response.body);
+      var user = new User.fromJson(userMap);
+      print(response.body);
+      return user;
+    } else {
+      throw Exception('Failed to load article');
+    }
+  }
+
+  static Future<List<Article>> fetchUserArticle(String userId) async {
+    final _url = "https://qiita.com/api/v2/items?page=1&per_page=20&query=" +userId+ "%3AQiita";
+    final response = await http.get(
+      Uri.parse(_url),
+      headers: {
+        'Authorization': 'Bearer $accessToken',
+      },
+    );
+    if (response.statusCode == 200) {
+      final List<dynamic> userArticleJsonArray = json.decode(response.body);
+      print(_url);
+      print(response.body);
+      return userArticleJsonArray.map((json) => Article.fromJson(json)).toList();
+    } else {
+      throw Exception('Failed to load article');
+    }
+  }
 }
