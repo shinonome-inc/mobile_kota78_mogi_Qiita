@@ -6,6 +6,7 @@ import 'package:qiita_app1/model/user.dart';
 import 'package:qiita_app1/client/qiita_client.dart';
 import 'package:qiita_app1/model/article.dart';
 import 'package:qiita_app1/page/follow_follower_page.dart';
+import 'package:qiita_app1/page/error_page.dart';
 
 class UserPage extends StatelessWidget {
   final String userId, userName;
@@ -52,9 +53,7 @@ class UserPage extends StatelessWidget {
                           );
                         }
                         if (snapshot.hasError) {
-                          print(snapshot.error.toString());
-                          return Text(snapshot.error.toString());
-                          // todo: エラー画面実装
+                          return ErrorPage(QiitaClient.fetchUserProfile(userId));
                         } else {
                           return Text("データが存在しません");
                         }
@@ -239,7 +238,7 @@ class UserPageView extends StatelessWidget {
                 );
               }
               if (snapshot.hasError) {
-                return Text(snapshot.error.toString());
+                return ErrorPage(QiitaClient.fetchUserProfile(userId));
               } else {
                 return Text("データが存在しません");
               }

@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:qiita_app1/client/qiita_client.dart';
 import 'package:qiita_app1/root.dart';
-
+import 'package:qiita_app1/page/error_page.dart';
 
 class TopPage extends StatefulWidget {
   TopPage(
@@ -33,14 +34,14 @@ class _TopPageState extends State<TopPage> {
               Column(children: [
                 Expanded(flex: 4, child: (Container())),
                 Text(
-                    "Qiita Feed App",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 40.0,
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: "Pacifico",
-                    ),
+                  "Qiita Feed App",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 40.0,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: "Pacifico",
+                  ),
                 ),
                 Text("-PlayGround-", style: TextStyle(color: Colors.white),),
                 Expanded(flex:5, child: (Container())),
@@ -77,6 +78,10 @@ class _TopPageState extends State<TopPage> {
                 GestureDetector(
                   onTap: (){
                     print('Tapped Privacy Policy');
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => ErrorPage(QiitaClient.fetchArticle(""))),
+                    );
                   },
                   child: Text(
                     "ログインせずに利用する",

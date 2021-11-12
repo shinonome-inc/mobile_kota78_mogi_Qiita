@@ -5,6 +5,7 @@ import 'package:qiita_app1/model/article.dart';
 import 'package:qiita_app1/hex_color.dart';
 import 'package:qiita_app1/component/article_list.dart';
 import 'package:qiita_app1/client/qiita_client.dart';
+import 'package:qiita_app1/page/error_page.dart';
 
 class TagDetailPage extends StatefulWidget {
   TagDetailPage(this.tagName);
@@ -59,27 +60,33 @@ class _TagDetailPageState extends State<TagDetailPage> {
         body: Center(
           child: Column(
             children: [
-              FutureBuilder<List<Article>>(
-                future: QiitaClient.fetchTagDetail(widget.tagName),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    return Expanded(
-                      child: RefreshIndicator(
-                        onRefresh: () async {
-                          QiitaClient.fetchTagDetail(widget.tagName);
-                        },
-                        child: ArticleListView(articles: snapshot.data!,),
-                        //child: articleListView(snapshot.data),
-                      ),
-                    );
-                  }
-                  return Expanded(
-                    child: Container(
-                        alignment: Alignment.center,
-                        child: CircularProgressIndicator()
-                    ),
-                  );
-                },
+              Expanded(
+                child: FutureBuilder<List<Article>>(
+                  future: QiitaClient.fetchTagDetail(widget.tagName),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return Expanded(
+                        child: RefreshIndicator(
+                          onRefresh: () async {
+                            QiitaClient.fetchTagDetail(widget.tagName);
+                          },
+                          child: ArticleListView(articles: snapshot.data!,),
+                        ),
+                      );
+                    }
+                    if (snapshot.connectionState != ConnectionState.done) {
+                      return Container(
+                          alignment: Alignment.center,
+                          child: CircularProgressIndicator()
+                      );
+                    }
+                    if (snapshot.hasError) {
+                    return ErrorPage(QiitaClient.fetchTagDetail(widget.tagName));
+                    } else {
+                      return Text("データが存在しません");
+                    }
+                  },
+                ),
               ),
             ],
           ),

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:qiita_app1/model/user.dart';
 import 'package:qiita_app1/client/qiita_client.dart';
 import 'package:qiita_app1/component/user_list.dart';
+import 'package:qiita_app1/page/error_page.dart';
 
 class FollowPage extends StatelessWidget {
   final String userId;
@@ -34,7 +35,7 @@ class FollowPage extends StatelessWidget {
             );
           }
           if (snapshot.hasError) {
-            return Text(snapshot.error.toString());
+            return ErrorPage(QiitaClient.fetchFollowees(userId));
           } else {
             return Text("データが存在しません");
           }
