@@ -91,14 +91,16 @@ class _TopPageState extends State<TopPage> {
               ],
               ),
               isShowErrorView
-              ? Positioned.fill(child: ErrorPage(
-                refreshFunction: () {
-                  print('refreshFunction');
-                  setState(() {
-                    isShowErrorView = false;
-                  });
-                },
-              ))
+                  ? Positioned.fill(
+                  child: ErrorPage(
+                    refreshFunction: () {
+                      print('refreshFunction');
+                      setState(() {
+                        isShowErrorView = false;
+                      });
+                      },
+                  )
+              )
                   : Container()
             ]
         )
