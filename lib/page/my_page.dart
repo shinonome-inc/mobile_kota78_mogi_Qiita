@@ -48,7 +48,12 @@ class MyPage extends StatelessWidget {
                           );
                         }
                         if (snapshot.hasError) {
-                          return ErrorPage(QiitaClient.fetchMyProfile());
+                          return ErrorPage(
+                            refreshFunction: () {
+                              QiitaClient.fetchMyProfile();
+                              print('refreshFunction');
+                              },
+                          );
                         } else {
                           return Text("データが存在しません");
                         }

@@ -53,7 +53,12 @@ class UserPage extends StatelessWidget {
                           );
                         }
                         if (snapshot.hasError) {
-                          return ErrorPage(QiitaClient.fetchUserProfile(userId));
+                          return ErrorPage(
+                            refreshFunction: () {
+                              QiitaClient.fetchUserProfile(userId);
+                              print('refreshFunction');
+                            },
+                          );
                         } else {
                           return Text("データが存在しません");
                         }
@@ -238,7 +243,12 @@ class UserPageView extends StatelessWidget {
                 );
               }
               if (snapshot.hasError) {
-                return ErrorPage(QiitaClient.fetchUserProfile(userId));
+                return ErrorPage(
+                  refreshFunction: () {
+                    QiitaClient.fetchUserProfile(userId);
+                    print('refreshFunction');
+                  },
+                );
               } else {
                 return Text("データが存在しません");
               }

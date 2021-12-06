@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:qiita_app1/client/qiita_client.dart';
 import 'package:qiita_app1/root.dart';
 import 'package:qiita_app1/page/error_page.dart';
 
@@ -10,12 +9,12 @@ class TopPage extends StatefulWidget {
       ) : super(key: key);
 
 
-
   @override
   _TopPageState createState() => _TopPageState();
 }
 
 class _TopPageState extends State<TopPage> {
+  var isShowErrorView = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -77,12 +76,8 @@ class _TopPageState extends State<TopPage> {
                 ),
                 GestureDetector(
                   onTap: (){
-                    print('Tapped Privacy Policy');
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => ErrorPage(QiitaClient.fetchArticle(""))),
-                    );
-                  },
+                    print('Without LogIn is tapped');
+                    },
                   child: Text(
                     "ログインせずに利用する",
                     style: TextStyle(
@@ -94,7 +89,18 @@ class _TopPageState extends State<TopPage> {
                 ),
                 Expanded(child: Container(),),
               ],
-              ),]
+              ),
+              isShowErrorView
+              ? Positioned.fill(child: ErrorPage(
+                refreshFunction: () {
+                  print('refreshFunction');
+                  setState(() {
+                    isShowErrorView = false;
+                  });
+                },
+              ))
+                  : Container()
+            ]
         )
     );
   }

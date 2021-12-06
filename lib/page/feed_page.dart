@@ -117,7 +117,12 @@ class _FeedPageState extends State<FeedPage> {
                       );
                     }
                     if (snapshot.hasError) {
-                      return ErrorPage(QiitaClient.fetchArticle(""));
+                      return ErrorPage(
+                        refreshFunction: () {
+                          QiitaClient.fetchArticle("");
+                          print('refreshFunction');
+                        },
+                      );
                     } else {
                       return Text("データが存在しません");
                     }

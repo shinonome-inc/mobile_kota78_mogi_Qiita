@@ -35,7 +35,12 @@ class FollowerPage extends StatelessWidget {
             );
           }
           if (snapshot.hasError) {
-            return ErrorPage(QiitaClient.fetchFollowers(userId));
+            return ErrorPage(
+              refreshFunction: () {
+                print('refreshFunction');
+                QiitaClient.fetchFollowers(userId);
+              },
+            );
           } else {
             return Text("データが存在しません");
           }

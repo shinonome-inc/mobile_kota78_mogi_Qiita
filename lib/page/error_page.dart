@@ -4,8 +4,8 @@ import 'package:qiita_app1/hex_color.dart';
 import 'package:qiita_app1/constants.dart';
 
 class ErrorPage extends StatefulWidget {
-  final Future<dynamic> refreshFunction;
-  ErrorPage(this.refreshFunction);
+  final VoidCallback refreshFunction;
+  ErrorPage({required this.refreshFunction});
 
   @override
   _ErrorPageState createState() => _ErrorPageState();
@@ -22,9 +22,7 @@ class _ErrorPageState extends State<ErrorPage> {
         borderRadius: BorderRadius.all(Radius.circular(25.0)),
         clipBehavior: Clip.antiAlias,
         child: InkWell(
-          onTap: () async{
-            await widget.refreshFunction;
-            },
+          onTap: () => widget.refreshFunction,
           child: Container(
             height: 50,
             child: Center(

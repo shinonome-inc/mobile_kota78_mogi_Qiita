@@ -81,7 +81,12 @@ class _TagDetailPageState extends State<TagDetailPage> {
                       );
                     }
                     if (snapshot.hasError) {
-                    return ErrorPage(QiitaClient.fetchTagDetail(widget.tagName));
+                    return ErrorPage(
+                      refreshFunction: () {
+                        print('refreshFunction');
+                        QiitaClient.fetchTagDetail(widget.tagName);
+                        },
+                    );
                     } else {
                       return Text("データが存在しません");
                     }
