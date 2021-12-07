@@ -16,6 +16,13 @@ class FeedPage extends StatefulWidget {
 class _FeedPageState extends State<FeedPage> {
 
   String onFieldSubmitted = "";
+  late Future<List<Article>> articleList;
+
+  @override
+  void initState() {
+    articleList = QiitaClient.fetchArticle("");
+    super.initState();
+  }
 
   //Kaoruさんのコード
   final textController = TextEditingController();
@@ -95,13 +102,13 @@ class _FeedPageState extends State<FeedPage> {
           ),
         ),
         body: Center(
-
           child: Column(
             children: [
               Expanded(
                 child: FutureBuilder<List<Article>>(
-                  future: QiitaClient.fetchArticle(""),
-                  builder: (BuildContext context, AsyncSnapshot<List<Article>> snapshot) {
+                  future: articleList,
+                  builder: (BuildContext context,
+                      AsyncSnapshot<List<Article>> snapshot) {
                    if (snapshot.hasData) {
                       return RefreshIndicator(
                         onRefresh: () async {
@@ -119,8 +126,7 @@ class _FeedPageState extends State<FeedPage> {
                     if (snapshot.hasError) {
                       return ErrorPage(
                         refreshFunction: () {
-                          QiitaClient.fetchArticle("");
-                          print('refreshFunction');
+                          articleList = QiitaClient.fetchArticle("");
                         },
                       );
                     } else {

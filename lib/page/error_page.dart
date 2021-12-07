@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:qiita_app1/hex_color.dart';
 import 'package:qiita_app1/constants.dart';
 
+
 class ErrorPage extends StatefulWidget {
   final VoidCallback refreshFunction;
   ErrorPage({required this.refreshFunction});
