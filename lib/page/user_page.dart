@@ -8,9 +8,23 @@ import 'package:qiita_app1/model/article.dart';
 import 'package:qiita_app1/page/follow_follower_page.dart';
 import 'package:qiita_app1/page/error_page.dart';
 
-class UserPage extends StatelessWidget {
+class UserPage extends StatefulWidget {
   final String userId, userName;
   UserPage(this.userId, this.userName);
+
+  @override
+  State<UserPage> createState() => _UserPageState();
+}
+
+class _UserPageState extends State<UserPage> {
+
+  late Future<User> userProfile;
+  @override
+  void initState() {
+    QiitaClient.fetchUserProfile(widget.userId);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -25,7 +39,7 @@ class UserPage extends StatelessWidget {
           ),
           shape: Border(bottom: BorderSide(color: HexColor(Constants.grey), width: 0.3)),
           title: Text(
-            userName,
+            widget.userName,
             style: TextStyle(
               color: Colors.black,
               fontSize: 15.0,
@@ -41,10 +55,10 @@ class UserPage extends StatelessWidget {
                 children: [
                   Expanded(
                     child: FutureBuilder<User>(
-                      future: QiitaClient.fetchUserProfile(userId),
+                      future: userProfile,
                       builder: (BuildContext context, AsyncSnapshot<User> snapshot) {
                         if (snapshot.hasData) {
-                          return UserPageView(userData: snapshot.data!, userId: userId,);
+                          return UserPageView(userData: snapshot.data!, userId: widget.userId,);
                         }
                         if (snapshot.connectionState != ConnectionState.done) {
                           return Container(
@@ -55,8 +69,7 @@ class UserPage extends StatelessWidget {
                         if (snapshot.hasError) {
                           return ErrorPage(
                             refreshFunction: () {
-                              QiitaClient.fetchUserProfile(userId);
-                              print('refreshFunction');
+                              userProfile = QiitaClient.fetchUserProfile(widget.userId);
                             },
                           );
                         } else {
@@ -75,10 +88,22 @@ class UserPage extends StatelessWidget {
   }
 }
 
-class UserPageView extends StatelessWidget {
+class UserPageView extends StatefulWidget {
   final String userId;
   final User userData;
   UserPageView({Key? key,required this.userData, required this.userId}) : super(key: key);
+
+  @override
+  State<UserPageView> createState() => _UserPageViewState();
+}
+
+class _UserPageViewState extends State<UserPageView> {
+  late Future<List<Article>> userArticle;
+  @override
+  void initState() {
+    QiitaClient.fetchUserArticle(widget.userId);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -92,10 +117,10 @@ class UserPageView extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                userData.iconUrl != null ?
+                widget.userData.iconUrl != null ?
                 CircleAvatar(
                   radius: 40.0,
-                  backgroundImage: NetworkImage(userData.iconUrl!),
+                  backgroundImage: NetworkImage(widget.userData.iconUrl!),
                 ) :
                 CircleAvatar(
                   radius: 40.0,
@@ -109,14 +134,14 @@ class UserPageView extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.fromLTRB(0, 16, 0, 4),
                   child: Text(
-                    userData.userName ?? "ユーザー名未設定",
+                    widget.userData.userName ?? "ユーザー名未設定",
                     style: TextStyle(
                       color: HexColor(Constants.black),
                       fontSize: 20
                     ),
                   ),
                 ),
-                Text("@${userData.id ?? "id未設定"}",
+                Text("@${widget.userData.id ?? "id未設定"}",
 
                   style: TextStyle(
                     color: HexColor(Constants.darkGrey),
@@ -126,7 +151,7 @@ class UserPageView extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.fromLTRB(0, 16, 0, 16),
                   child: Text(
-                    userData.description != null ? userData.description! : "",
+                    widget.userData.description != null ? widget.userData.description! : "",
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -137,7 +162,7 @@ class UserPageView extends StatelessWidget {
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => FollowFollowerPage(false, userData.id ?? "", userData.userName ?? "")),
+                          MaterialPageRoute(builder: (context) => FollowFollowerPage(false, widget.userData.id ?? "", widget.userData.userName ?? "")),
                         );
                       },
                       child: RichText(
@@ -148,7 +173,7 @@ class UserPageView extends StatelessWidget {
                               ),
                               children: [
                                 TextSpan(
-                                  text: userData.followeesCount.toString(),
+                                  text: widget.userData.followeesCount.toString(),
                                   style: TextStyle(
                                     fontWeight: FontWeight.w700,
                                   ),
@@ -168,7 +193,7 @@ class UserPageView extends StatelessWidget {
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => FollowFollowerPage(true, userData.id ?? "", userData.userName ?? "")),
+                          MaterialPageRoute(builder: (context) => FollowFollowerPage(true, widget.userData.id ?? "", widget.userData.userName ?? "")),
                         );
                       },
                       child: RichText(
@@ -179,7 +204,7 @@ class UserPageView extends StatelessWidget {
                               ),
                               children: [
                                 TextSpan(
-                                  text: userData.followersCount.toString(),
+                                  text: widget.userData.followersCount.toString(),
                                   style: TextStyle(
                                     fontWeight: FontWeight.w700,
                                   ),
@@ -220,12 +245,12 @@ class UserPageView extends StatelessWidget {
         ),
         Expanded(
           child: FutureBuilder<List<Article>>(
-            future: QiitaClient.fetchUserArticle(userId),
+            future: userArticle,
             builder: (BuildContext context, AsyncSnapshot<List<Article>> snapshot) {
               if (snapshot.hasData) {
                   return RefreshIndicator(
                     onRefresh: () async {
-                      QiitaClient.fetchMyArticle();
+                      userArticle = QiitaClient.fetchUserArticle(widget.userId);
                       },
                     child: (() {
                       if (snapshot.data?.isEmpty ?? true) {
@@ -245,8 +270,7 @@ class UserPageView extends StatelessWidget {
               if (snapshot.hasError) {
                 return ErrorPage(
                   refreshFunction: () {
-                    QiitaClient.fetchUserProfile(userId);
-                    print('refreshFunction');
+                    userArticle = QiitaClient.fetchUserArticle(widget.userId);
                   },
                 );
               } else {

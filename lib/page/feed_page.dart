@@ -112,7 +112,7 @@ class _FeedPageState extends State<FeedPage> {
                    if (snapshot.hasData) {
                       return RefreshIndicator(
                         onRefresh: () async {
-                          QiitaClient.fetchArticle(onFieldSubmitted);
+                          articleList = QiitaClient.fetchArticle(onFieldSubmitted);
                         },
                         child: ArticleListView(articles: snapshot.data!),
                       );

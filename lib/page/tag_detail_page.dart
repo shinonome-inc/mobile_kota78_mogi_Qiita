@@ -17,7 +17,13 @@ class TagDetailPage extends StatefulWidget {
 class _TagDetailPageState extends State<TagDetailPage> {
 
   QiitaClient qiitaClient = QiitaClient();
+  late Future<List<Article>> tagDetailList;
 
+  @override
+  void initState() {
+    tagDetailList = QiitaClient.fetchTagDetail(widget.tagName);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -62,13 +68,13 @@ class _TagDetailPageState extends State<TagDetailPage> {
             children: [
               Expanded(
                 child: FutureBuilder<List<Article>>(
-                  future: QiitaClient.fetchTagDetail(widget.tagName),
+                  future: tagDetailList,
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       return Expanded(
                         child: RefreshIndicator(
                           onRefresh: () async {
-                            QiitaClient.fetchTagDetail(widget.tagName);
+                            tagDetailList = QiitaClient.fetchTagDetail(widget.tagName);
                           },
                           child: ArticleListView(articles: snapshot.data!,),
                         ),
@@ -83,8 +89,7 @@ class _TagDetailPageState extends State<TagDetailPage> {
                     if (snapshot.hasError) {
                     return ErrorPage(
                       refreshFunction: () {
-                        print('refreshFunction');
-                        QiitaClient.fetchTagDetail(widget.tagName);
+                        tagDetailList = QiitaClient.fetchTagDetail(widget.tagName);
                         },
                     );
                     } else {

@@ -5,19 +5,32 @@ import 'package:qiita_app1/client/qiita_client.dart';
 import 'package:qiita_app1/component/user_list.dart';
 import 'package:qiita_app1/page/error_page.dart';
 
-class FollowPage extends StatelessWidget {
+class FollowPage extends StatefulWidget {
   final String userId;
   FollowPage(this.userId);
+
+  @override
+  State<FollowPage> createState() => _FollowPageState();
+}
+
+class _FollowPageState extends State<FollowPage> {
+  late Future<List<User>> followeesList;
+  @override
+  void initState() {
+    followeesList = QiitaClient.fetchFollowees(widget.userId);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Expanded(
       child: FutureBuilder<List<User>>(
-        future: QiitaClient.fetchFollowees(userId),
+        future: followeesList,
         builder: (BuildContext context, AsyncSnapshot<List<User>> snapshot) {
           if (snapshot.hasData) {
             return RefreshIndicator(
               onRefresh: () async {
-                QiitaClient.fetchFollowees(userId);
+                followeesList = QiitaClient.fetchFollowees(widget.userId);
               },
               child: (() {
                 if (snapshot.data?.isEmpty ?? true) {
@@ -37,7 +50,7 @@ class FollowPage extends StatelessWidget {
           if (snapshot.hasError) {
             return ErrorPage(
               refreshFunction: () {
-                print('refreshFunction');
+                followeesList = QiitaClient.fetchFollowees(widget.userId);
               },
             );
           } else {
