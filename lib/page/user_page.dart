@@ -21,7 +21,7 @@ class _UserPageState extends State<UserPage> {
   late Future<User> userProfile;
   @override
   void initState() {
-    QiitaClient.fetchUserProfile(widget.userId);
+    userProfile = QiitaClient.fetchUserProfile(widget.userId);
     super.initState();
   }
 
@@ -101,7 +101,7 @@ class _UserPageViewState extends State<UserPageView> {
   late Future<List<Article>> userArticle;
   @override
   void initState() {
-    QiitaClient.fetchUserArticle(widget.userId);
+    userArticle = QiitaClient.fetchUserArticle(widget.userId);
     super.initState();
   }
 
