@@ -18,6 +18,19 @@ class ArticleListView extends StatefulWidget {
 class _ArticleListViewState extends State<ArticleListView> {
   QiitaClient qiitaClient = QiitaClient();
 
+  double _webViewHeight = 1;
+  late WebViewController _webViewController;
+
+  Future<void> _onPageFinished(BuildContext context, String url) async {
+    double newHeight = double.parse(
+      await _webViewController
+          .evaluateJavascript("document.documentElement.scrollHeight;"),
+    );
+    setState(() {
+      _webViewHeight = newHeight;
+    });
+  }
+
   Widget _modal (Article article){
     return Container(
       height: MediaQuery.of(context).size.height * 0.8,
@@ -25,11 +38,12 @@ class _ArticleListViewState extends State<ArticleListView> {
         children: <Widget>[
           Container(
             height: 60,
+            width: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(
               color: Colors.grey[300],
               borderRadius: const BorderRadius.only(
-                topRight: const Radius.circular(20),
-                topLeft: const Radius.circular(20),
+                topRight: const Radius.circular(10),
+                topLeft: const Radius.circular(10),
               ),
             ),
             child: Align(alignment: Alignment.center,
@@ -37,21 +51,30 @@ class _ArticleListViewState extends State<ArticleListView> {
                   style: TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
-                      fontSize: 20,
+                      fontSize: 17,
                       fontFamily: 'Pacifico'
                   )
               ),
             ),
           ),
           Expanded(
-            child: Container(
-              color: Colors.white,
-              child:Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: WebView(initialUrl: article.url,)
+            child: SingleChildScrollView(
+              child: Container(
+                height: _webViewHeight,
+                color: Colors.white,
+                child:Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: WebView(
+                      initialUrl: article.url,
+                      javascriptMode: JavascriptMode.unrestricted,
+                      onPageFinished: (String url) => _onPageFinished(context, url),
+                      onWebViewCreated: (controller) async {
+                        _webViewController = controller;
+                      },
+                    )),
+                ),
               ),
             ),
-          ),
         ],
       ),
     );
