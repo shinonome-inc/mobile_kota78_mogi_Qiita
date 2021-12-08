@@ -3,20 +3,34 @@ import 'package:flutter/material.dart';
 import 'package:qiita_app1/model/user.dart';
 import 'package:qiita_app1/client/qiita_client.dart';
 import 'package:qiita_app1/component/user_list.dart';
+import 'package:qiita_app1/page/error_page.dart';
 
-class FollowerPage extends StatelessWidget {
+class FollowerPage extends StatefulWidget {
   final String userId;
   FollowerPage(this.userId);
+
+  @override
+  State<FollowerPage> createState() => _FollowerPageState();
+}
+
+class _FollowerPageState extends State<FollowerPage> {
+  late Future<List<User>> followersList;
+  @override
+  void initState() {
+    followersList = QiitaClient.fetchFollowers(widget.userId);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Expanded(
       child: FutureBuilder<List<User>>(
-        future: QiitaClient.fetchFollowers(userId),
+        future: followersList,
         builder: (BuildContext context, AsyncSnapshot<List<User>> snapshot) {
           if (snapshot.hasData) {
             return RefreshIndicator(
               onRefresh: () async {
-                QiitaClient.fetchFollowers(userId);
+                followersList = QiitaClient.fetchFollowers(widget.userId);
               },
               child: (() {
                 if (snapshot.data?.isEmpty ?? true) {
@@ -34,7 +48,11 @@ class FollowerPage extends StatelessWidget {
             );
           }
           if (snapshot.hasError) {
-            return Text(snapshot.error.toString());
+            return ErrorPage(
+              refreshFunction: () {
+                followersList = QiitaClient.fetchFollowers(widget.userId);
+              },
+            );
           } else {
             return Text("データが存在しません");
           }

@@ -6,8 +6,21 @@ import 'package:qiita_app1/model/user.dart';
 import 'package:qiita_app1/client/qiita_client.dart';
 import 'package:qiita_app1/model/article.dart';
 import 'package:qiita_app1/page/follow_follower_page.dart';
+import 'package:qiita_app1/page/error_page.dart';
 
-class MyPage extends StatelessWidget {
+class MyPage extends StatefulWidget {
+
+  @override
+  State<MyPage> createState() => _MyPageState();
+}
+
+class _MyPageState extends State<MyPage> {
+  late Future<User> myProfile;
+  @override
+  void initState() {
+    myProfile = QiitaClient.fetchMyProfile();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +48,7 @@ class MyPage extends StatelessWidget {
                 children: [
                   Expanded(
                     child: FutureBuilder<User>(
-                      future: QiitaClient.fetchMyProfile(),
+                      future: myProfile,
                       builder: (BuildContext context, AsyncSnapshot<User> snapshot) {
                         if (snapshot.hasData) {
                           return MyPageView(userData: snapshot.data!,);
@@ -47,9 +60,11 @@ class MyPage extends StatelessWidget {
                           );
                         }
                         if (snapshot.hasError) {
-                          print(snapshot.error.toString());
-                          return Text(snapshot.error.toString());
-                          // todo: エラー画面実装
+                          return ErrorPage(
+                            refreshFunction: () {
+                              myProfile = QiitaClient.fetchMyProfile();
+                              },
+                          );
                         } else {
                           return Text("データが存在しません");
                         }
@@ -66,9 +81,21 @@ class MyPage extends StatelessWidget {
   }
 }
 
-class MyPageView extends StatelessWidget {
+class MyPageView extends StatefulWidget {
   final User userData;
   MyPageView({Key? key,required this.userData}) : super(key: key);
+
+  @override
+  State<MyPageView> createState() => _MyPageViewState();
+}
+
+class _MyPageViewState extends State<MyPageView> {
+  late Future<List<Article>> myArticleList;
+  @override
+  void initState() {
+    myArticleList = QiitaClient.fetchMyArticle();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -82,10 +109,10 @@ class MyPageView extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                userData.iconUrl != null ?
+                widget.userData.iconUrl != null ?
                 CircleAvatar(
                   radius: 40.0,
-                  backgroundImage: NetworkImage(userData.iconUrl!),
+                  backgroundImage: NetworkImage(widget.userData.iconUrl!),
                 ) :
                 CircleAvatar(
                   radius: 40.0,
@@ -99,7 +126,7 @@ class MyPageView extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.fromLTRB(0, 16, 0, 4),
                   child: Text(
-                    userData.userName ?? "ユーザー名未設定",
+                    widget.userData.userName ?? "ユーザー名未設定",
                     style: TextStyle(
                       color: HexColor(Constants.black),
                       fontSize: 20
@@ -107,7 +134,7 @@ class MyPageView extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  "@${userData.id ?? "id未設定"}",
+                  "@${widget.userData.id ?? "id未設定"}",
                   style: TextStyle(
                     color: HexColor(Constants.darkGrey),
                     fontSize: 12
@@ -116,7 +143,7 @@ class MyPageView extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.fromLTRB(0, 16, 0, 16),
                   child: Text(
-                    userData.description != null ? userData.description! : "",
+                    widget.userData.description != null ? widget.userData.description! : "",
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -127,7 +154,7 @@ class MyPageView extends StatelessWidget {
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => new FollowFollowerPage(false, userData.id ?? "", userData.userName ?? "")),
+                          MaterialPageRoute(builder: (context) => new FollowFollowerPage(false, widget.userData.id ?? "", widget.userData.userName ?? "")),
                         );
                       },
                       child: RichText(
@@ -138,7 +165,7 @@ class MyPageView extends StatelessWidget {
                               ),
                               children: [
                                 TextSpan(
-                                  text: userData.followeesCount.toString(),
+                                  text: widget.userData.followeesCount.toString(),
                                   style: TextStyle(
                                     fontWeight: FontWeight.w700,
                                   ),
@@ -158,7 +185,7 @@ class MyPageView extends StatelessWidget {
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => new FollowFollowerPage(true, userData.id ?? "", userData.userName ?? "")),
+                          MaterialPageRoute(builder: (context) => new FollowFollowerPage(true, widget.userData.id ?? "", widget.userData.userName ?? "")),
                         );
                       },
                       child: RichText(
@@ -168,7 +195,7 @@ class MyPageView extends StatelessWidget {
                               ),
                               children: [
                                 TextSpan(
-                                  text: userData.followersCount.toString(),
+                                  text: widget.userData.followersCount.toString(),
                                   style: TextStyle(
                                     fontWeight: FontWeight.w700,
                                   ),
@@ -209,12 +236,12 @@ class MyPageView extends StatelessWidget {
         ),
         Expanded(
           child: FutureBuilder<List<Article>>(
-            future: QiitaClient.fetchMyArticle(),
+            future: myArticleList,
             builder: (BuildContext context, AsyncSnapshot<List<Article>> snapshot) {
               if (snapshot.hasData) {
                   return RefreshIndicator(
                     onRefresh: () async {
-                      QiitaClient.fetchMyArticle();
+                      myArticleList = QiitaClient.fetchMyArticle();
                       },
                     child: (() {
                       if (snapshot.data?.isEmpty ?? true) {
@@ -232,7 +259,11 @@ class MyPageView extends StatelessWidget {
                 );
               }
               if (snapshot.hasError) {
-                return Text(snapshot.error.toString());
+                return ErrorPage(
+                    refreshFunction: () {
+                      myArticleList = QiitaClient.fetchMyArticle();
+                    }
+                );
               } else {
                 return Text("データが存在しません");
               }

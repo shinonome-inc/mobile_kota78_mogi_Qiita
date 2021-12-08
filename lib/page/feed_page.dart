@@ -5,6 +5,7 @@ import 'package:qiita_app1/constants.dart';
 import 'package:qiita_app1/model/article.dart';
 import 'package:qiita_app1/component/article_list.dart';
 import 'package:qiita_app1/hex_color.dart';
+import 'package:qiita_app1/page/error_page.dart';
 
 class FeedPage extends StatefulWidget {
   const FeedPage({Key? key}) : super(key: key);
@@ -15,6 +16,13 @@ class FeedPage extends StatefulWidget {
 class _FeedPageState extends State<FeedPage> {
 
   String onFieldSubmitted = "";
+  late Future<List<Article>> articleList;
+
+  @override
+  void initState() {
+    articleList = QiitaClient.fetchArticle("");
+    super.initState();
+  }
 
   //Kaoruさんのコード
   final textController = TextEditingController();
@@ -57,7 +65,6 @@ class _FeedPageState extends State<FeedPage> {
   }
 //ここまで
 
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -95,17 +102,17 @@ class _FeedPageState extends State<FeedPage> {
           ),
         ),
         body: Center(
-
           child: Column(
             children: [
               Expanded(
                 child: FutureBuilder<List<Article>>(
-                  future: QiitaClient.fetchArticle(""),
-                  builder: (BuildContext context, AsyncSnapshot<List<Article>> snapshot) {
-                    if (snapshot.hasData) {
+                  future: articleList,
+                  builder: (BuildContext context,
+                      AsyncSnapshot<List<Article>> snapshot) {
+                   if (snapshot.hasData) {
                       return RefreshIndicator(
                         onRefresh: () async {
-                          QiitaClient.fetchArticle(onFieldSubmitted);
+                          articleList = QiitaClient.fetchArticle(onFieldSubmitted);
                         },
                         child: ArticleListView(articles: snapshot.data!),
                       );
@@ -117,8 +124,11 @@ class _FeedPageState extends State<FeedPage> {
                       );
                     }
                     if (snapshot.hasError) {
-                      return Text(snapshot.error.toString());
-                      // todo: エラー画面実装
+                      return ErrorPage(
+                        refreshFunction: () {
+                          articleList = QiitaClient.fetchArticle("");
+                        },
+                      );
                     } else {
                       return Text("データが存在しません");
                     }
