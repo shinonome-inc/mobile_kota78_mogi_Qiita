@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:qiita_app1/client/qiita_client.dart';
 import 'package:qiita_app1/constants.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 import 'package:qiita_app1/hex_color.dart';
 import 'package:qiita_app1/model/article.dart';
 import 'package:intl/intl.dart';
+import 'package:qiita_app1/component/modal.dart';
 
 
 class ArticleListView extends StatefulWidget {
@@ -17,68 +17,6 @@ class ArticleListView extends StatefulWidget {
 }
 class _ArticleListViewState extends State<ArticleListView> {
   QiitaClient qiitaClient = QiitaClient();
-
-  double _webViewHeight = 1;
-  late WebViewController _webViewController;
-
-  Future<void> _onPageFinished(BuildContext context, String url) async {
-    double newHeight = double.parse(
-      await _webViewController
-          .evaluateJavascript("document.documentElement.scrollHeight;"),
-    );
-    setState(() {
-      _webViewHeight = newHeight;
-    });
-  }
-
-  Widget _modal (Article article){
-    return Container(
-      height: MediaQuery.of(context).size.height * 0.8,
-      child: Column(
-        children: <Widget>[
-          Container(
-            height: 60,
-            width: MediaQuery.of(context).size.width,
-            decoration: BoxDecoration(
-              color: Colors.grey[300],
-              borderRadius: const BorderRadius.only(
-                topRight: const Radius.circular(10),
-                topLeft: const Radius.circular(10),
-              ),
-            ),
-            child: Align(alignment: Alignment.center,
-              child: Text("Article",
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 17,
-                      fontFamily: 'Pacifico'
-                  )
-              ),
-            ),
-          ),
-          Expanded(
-            child: SingleChildScrollView(
-              child: Container(
-                height: _webViewHeight,
-                color: Colors.white,
-                child:Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: WebView(
-                      initialUrl: article.url,
-                      javascriptMode: JavascriptMode.unrestricted,
-                      onPageFinished: (String url) => _onPageFinished(context, url),
-                      onWebViewCreated: (controller) async {
-                        _webViewController = controller;
-                      },
-                    )),
-                ),
-              ),
-            ),
-        ],
-      ),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -116,7 +54,7 @@ class _ArticleListViewState extends State<ArticleListView> {
                       context: context,
                       isScrollControlled: true,
                       builder: (BuildContext context) {
-                        return _modal(article);
+                        return Modal(url: article.url);
                       });
                 },
               ),
@@ -144,45 +82,6 @@ class UserArticleListView extends StatefulWidget {
 }
 class _UserArticleListViewState extends State<UserArticleListView> {
   QiitaClient qiitaClient = QiitaClient();
-
-  Widget _modal (Article article){
-    return Container(
-      height: MediaQuery.of(context).size.height * 0.8,
-      child: Column(
-        children: <Widget>[
-          Container(
-            height: 60,
-            decoration: BoxDecoration(
-              color: Colors.grey[300],
-              borderRadius: const BorderRadius.only(
-                topRight: const Radius.circular(20),
-                topLeft: const Radius.circular(20),
-              ),
-            ),
-            child: Align(alignment: Alignment.center,
-              child: Text("Article",
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                      fontFamily: 'Pacifico'
-                  )
-              ),
-            ),
-          ),
-          Expanded(
-            child: Container(
-              color: Colors.white,
-              child:Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: WebView(initialUrl: article.url,)
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -220,7 +119,7 @@ class _UserArticleListViewState extends State<UserArticleListView> {
                       context: context,
                       isScrollControlled: true,
                       builder: (BuildContext context) {
-                        return _modal(article);
+                        return Modal(url: article.url);
                       });
                 },
               ),
