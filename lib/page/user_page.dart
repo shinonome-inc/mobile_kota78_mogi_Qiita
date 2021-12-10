@@ -8,22 +8,9 @@ import 'package:qiita_app1/model/article.dart';
 import 'package:qiita_app1/page/follow_follower_page.dart';
 import 'package:qiita_app1/page/error_page.dart';
 
-class UserPage extends StatefulWidget {
-  final String userId, userName;
-  UserPage(this.userId, this.userName);
-
-  @override
-  State<UserPage> createState() => _UserPageState();
-}
-
-class _UserPageState extends State<UserPage> {
-
-  late Future<User> userProfile;
-  @override
-  void initState() {
-    userProfile = QiitaClient.fetchUserProfile(widget.userId);
-    super.initState();
-  }
+class UserPage extends StatelessWidget {
+  final User userData;
+  UserPage(this.userData);
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +26,7 @@ class _UserPageState extends State<UserPage> {
           ),
           shape: Border(bottom: BorderSide(color: HexColor(Constants.grey), width: 0.3)),
           title: Text(
-            widget.userName,
+            userData.userName!,
             style: TextStyle(
               color: Colors.black,
               fontSize: 15.0,
@@ -54,30 +41,8 @@ class _UserPageState extends State<UserPage> {
               child: Column(
                 children: [
                   Expanded(
-                    child: FutureBuilder<User>(
-                      future: userProfile,
-                      builder: (BuildContext context, AsyncSnapshot<User> snapshot) {
-                        if (snapshot.hasData) {
-                          return UserPageView(userData: snapshot.data!, userId: widget.userId,);
-                        }
-                        if (snapshot.connectionState != ConnectionState.done) {
-                          return Container(
-                              alignment: Alignment.center,
-                              child: CircularProgressIndicator()
-                          );
-                        }
-                        if (snapshot.hasError) {
-                          return ErrorPage(
-                            refreshFunction: () {
-                              userProfile = QiitaClient.fetchUserProfile(widget.userId);
-                            },
-                          );
-                        } else {
-                          return Text("データが存在しません");
-                        }
-                      },
+                    child: UserPageView(userData: userData,)
                     ),
-                  ),
                 ],
               ),
             ),
@@ -89,9 +54,8 @@ class _UserPageState extends State<UserPage> {
 }
 
 class UserPageView extends StatefulWidget {
-  final String userId;
   final User userData;
-  UserPageView({Key? key,required this.userData, required this.userId}) : super(key: key);
+  UserPageView({Key? key,required this.userData}) : super(key: key);
 
   @override
   State<UserPageView> createState() => _UserPageViewState();
@@ -101,7 +65,7 @@ class _UserPageViewState extends State<UserPageView> {
   late Future<List<Article>> userArticle;
   @override
   void initState() {
-    userArticle = QiitaClient.fetchUserArticle(widget.userId);
+    userArticle = QiitaClient.fetchUserArticle(widget.userData.id!);
     super.initState();
   }
 
@@ -250,7 +214,7 @@ class _UserPageViewState extends State<UserPageView> {
               if (snapshot.hasData) {
                   return RefreshIndicator(
                     onRefresh: () async {
-                      userArticle = QiitaClient.fetchUserArticle(widget.userId);
+                      userArticle = QiitaClient.fetchUserArticle(widget.userData.id!);
                       },
                     child: (() {
                       if (snapshot.data?.isEmpty ?? true) {
@@ -270,7 +234,7 @@ class _UserPageViewState extends State<UserPageView> {
               if (snapshot.hasError) {
                 return ErrorPage(
                   refreshFunction: () {
-                    userArticle = QiitaClient.fetchUserArticle(widget.userId);
+                    userArticle = QiitaClient.fetchUserArticle(widget.userData.id!);
                   },
                 );
               } else {

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:qiita_app1/constants.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+import 'package:qiita_app1/hex_color.dart';
 
 
 class Modal extends StatefulWidget {
@@ -55,21 +57,26 @@ class _ModalState extends State<Modal> {
             ),
           ),
           Expanded(
-            child: SingleChildScrollView(
-              child: Container(
-                height: _webViewHeight,
-                color: Colors.white,
-                child:Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: WebView(
-                      initialUrl: widget.url,
-                      javascriptMode: JavascriptMode.unrestricted,
-                      onPageFinished: (String url) => _onPageFinished(context, url),
-                      onWebViewCreated: (controller) async {
-                        _webViewController = controller;
-                      },
-                    )),
-              ),
+            child: Stack(
+              children: [
+                Container(color: HexColor(Constants.white),),
+                SingleChildScrollView(
+                  child: Container(
+                    height: _webViewHeight,
+                    color: Colors.white,
+                    child:Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: WebView(
+                          initialUrl: widget.url,
+                          javascriptMode: JavascriptMode.unrestricted,
+                          onPageFinished: (String url) => _onPageFinished(context, url),
+                          onWebViewCreated: (controller) async {
+                            _webViewController = controller;
+                          },
+                        )),
+                  ),
+                ),
+              ],
             ),
           ),
         ],
