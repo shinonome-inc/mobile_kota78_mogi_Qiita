@@ -38,13 +38,7 @@ class UserPage extends StatelessWidget {
           children: <Widget>[
             Positioned.fill(child: Container(color: HexColor(Constants.white),)),
             Center(
-              child: Column(
-                children: [
-                  Expanded(
-                    child: UserPageView(userData: userData,)
-                    ),
-                ],
-              ),
+              child: UserPageView(userData: userData,),
             ),
           ],
         ),
