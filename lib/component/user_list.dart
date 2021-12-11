@@ -23,7 +23,7 @@ class UserListView extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => UserPage(user.id ?? "", user.userName ?? "")),
+                  MaterialPageRoute(builder: (context) => UserPage(user)),
                 );
               },
               child: Container(

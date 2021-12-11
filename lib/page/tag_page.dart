@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:qiita_app1/client/qiita_client.dart';
 import 'package:qiita_app1/model/tag.dart';
 import 'package:qiita_app1/component/tag_list.dart';
+import 'package:qiita_app1/page/error_page.dart';
 
 class TagPage extends StatefulWidget {
   const TagPage({Key? key}) : super(key: key);
@@ -39,23 +40,31 @@ class _TagPageState extends State<TagPage> {
           ),
         ),
         body: Center(
-          child: Column(
-            children: [
-              FutureBuilder<List<Tag>>(
-                future: tagList,
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    return TagListView(tags: snapshot.requireData);
-                  }
-                  return Expanded(
-                    child: Container(
-                        alignment: Alignment.center,
-                        child: CircularProgressIndicator()
-                    ),
-                  );
-                },
-              ),
-            ],
+          child:FutureBuilder<List<Tag>>(
+            future: tagList,
+            builder: (BuildContext context,
+                AsyncSnapshot<List<Tag>> snapshot) {
+              if (snapshot.hasData) {
+                return RefreshIndicator(
+                  onRefresh: () async {
+                    tagList = QiitaClient.fetchTag();
+                  },
+                  child: TagListView(tags: snapshot.requireData),
+                );
+              }
+              if (snapshot.connectionState != ConnectionState.done) {
+                return CircularProgressIndicator();
+              }
+              if (snapshot.hasError) {
+                return ErrorPage(
+                  refreshFunction: () {
+                    tagList = QiitaClient.fetchTag();
+                  },
+                );
+              } else {
+                return Text("データが存在しません");
+              }
+            },
           ),
         ),
       ),

@@ -102,40 +102,31 @@ class _FeedPageState extends State<FeedPage> {
           ),
         ),
         body: Center(
-          child: Column(
-            children: [
-              Expanded(
-                child: FutureBuilder<List<Article>>(
-                  future: articleList,
-                  builder: (BuildContext context,
-                      AsyncSnapshot<List<Article>> snapshot) {
-                   if (snapshot.hasData) {
-                      return RefreshIndicator(
-                        onRefresh: () async {
-                          articleList = QiitaClient.fetchArticle(onFieldSubmitted);
-                        },
-                        child: ArticleListView(articles: snapshot.data!),
-                      );
-                    }
-                    if (snapshot.connectionState != ConnectionState.done) {
-                      return Container(
-                          alignment: Alignment.center,
-                          child: CircularProgressIndicator()
-                      );
-                    }
-                    if (snapshot.hasError) {
-                      return ErrorPage(
-                        refreshFunction: () {
-                          articleList = QiitaClient.fetchArticle("");
-                        },
-                      );
-                    } else {
-                      return Text("データが存在しません");
-                    }
+          child: FutureBuilder<List<Article>>(
+            future: articleList,
+            builder: (BuildContext context,
+                AsyncSnapshot<List<Article>> snapshot) {
+             if (snapshot.hasData) {
+                return RefreshIndicator(
+                  onRefresh: () async {
+                    articleList = QiitaClient.fetchArticle(onFieldSubmitted);
                   },
-                ),
-              ),
-            ],
+                  child: ArticleListView(articles: snapshot.data!),
+                );
+              }
+              if (snapshot.connectionState != ConnectionState.done) {
+                return CircularProgressIndicator();
+              }
+              if (snapshot.hasError) {
+                return ErrorPage(
+                  refreshFunction: () {
+                    articleList = QiitaClient.fetchArticle("");
+                  },
+                );
+              } else {
+                return Text("データが存在しません");
+              }
+            },
           ),
         ),
       ),

@@ -36,7 +36,6 @@ class _TagDetailPageState extends State<TagDetailPage> {
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: (() {
-          if (widget.tagName == null) {
             return Text(
               widget.tagName,
               style: TextStyle(
@@ -45,7 +44,6 @@ class _TagDetailPageState extends State<TagDetailPage> {
                 fontFamily: "Pacifico",
               ),
             );
-          }
         })(),
         bottom: PreferredSize(
             preferredSize: const Size.fromHeight(28),
@@ -64,41 +62,30 @@ class _TagDetailPageState extends State<TagDetailPage> {
           ),
         ),
         body: Center(
-          child: Column(
-            children: [
-              Expanded(
-                child: FutureBuilder<List<Article>>(
-                  future: tagDetailList,
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      return Expanded(
-                        child: RefreshIndicator(
-                          onRefresh: () async {
-                            tagDetailList = QiitaClient.fetchTagDetail(widget.tagName);
-                          },
-                          child: ArticleListView(articles: snapshot.data!,),
-                        ),
-                      );
-                    }
-                    if (snapshot.connectionState != ConnectionState.done) {
-                      return Container(
-                          alignment: Alignment.center,
-                          child: CircularProgressIndicator()
-                      );
-                    }
-                    if (snapshot.hasError) {
-                    return ErrorPage(
-                      refreshFunction: () {
-                        tagDetailList = QiitaClient.fetchTagDetail(widget.tagName);
-                        },
-                    );
-                    } else {
-                      return Text("データが存在しません");
-                    }
+          child: FutureBuilder<List<Article>>(
+            future: tagDetailList,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return RefreshIndicator(
+                  onRefresh: () async {
+                    tagDetailList = QiitaClient.fetchTagDetail(widget.tagName);
                   },
-                ),
-              ),
-            ],
+                  child: ArticleListView(articles: snapshot.data!,),
+                );
+              }
+              if (snapshot.connectionState != ConnectionState.done) {
+                return CircularProgressIndicator();
+              }
+              if (snapshot.hasError) {
+              return ErrorPage(
+                refreshFunction: () {
+                  tagDetailList = QiitaClient.fetchTagDetail(widget.tagName);
+                  },
+              );
+              } else {
+                return Text("データが存在しません");
+              }
+            },
           ),
         ),
       );
