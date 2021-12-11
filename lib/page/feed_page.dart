@@ -115,10 +115,7 @@ class _FeedPageState extends State<FeedPage> {
                 );
               }
               if (snapshot.connectionState != ConnectionState.done) {
-                return Container(
-                    alignment: Alignment.center,
-                    child: CircularProgressIndicator()
-                );
+                return CircularProgressIndicator();
               }
               if (snapshot.hasError) {
                 return ErrorPage(
