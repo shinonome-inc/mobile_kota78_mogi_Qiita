@@ -39,23 +39,14 @@ class _TagPageState extends State<TagPage> {
           ),
         ),
         body: Center(
-          child: Column(
-            children: [
-              FutureBuilder<List<Tag>>(
-                future: tagList,
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    return TagListView(tags: snapshot.requireData);
-                  }
-                  return Expanded(
-                    child: Container(
-                        alignment: Alignment.center,
-                        child: CircularProgressIndicator()
-                    ),
-                  );
-                },
-              ),
-            ],
+          child: FutureBuilder<List<Tag>>(
+            future: tagList,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return TagListView(tags: snapshot.requireData);
+              }
+              return Center(child: CircularProgressIndicator());
+            },
           ),
         ),
       ),
