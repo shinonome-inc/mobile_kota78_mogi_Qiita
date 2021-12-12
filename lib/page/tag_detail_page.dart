@@ -21,7 +21,7 @@ class _TagDetailPageState extends State<TagDetailPage> {
 
   @override
   void initState() {
-    tagDetailList = QiitaClient.fetchTagDetail(widget.tagName);
+    tagDetailList = QiitaClient.fetchTagDetail(widget.tagName, 1);
     super.initState();
   }
 
@@ -68,9 +68,12 @@ class _TagDetailPageState extends State<TagDetailPage> {
               if (snapshot.hasData) {
                 return RefreshIndicator(
                   onRefresh: () async {
-                    tagDetailList = QiitaClient.fetchTagDetail(widget.tagName);
+                    tagDetailList = QiitaClient.fetchTagDetail(widget.tagName, 1);
                   },
-                  child: ArticleListView(articles: snapshot.data!,),
+                  child: ArticleListView(
+                    articles: snapshot.data!,
+                    onFieldSubmitted: "",
+                  ),
                 );
               }
               if (snapshot.connectionState != ConnectionState.done) {
@@ -79,7 +82,7 @@ class _TagDetailPageState extends State<TagDetailPage> {
               if (snapshot.hasError) {
               return ErrorPage(
                 refreshFunction: () {
-                  tagDetailList = QiitaClient.fetchTagDetail(widget.tagName);
+                  tagDetailList = QiitaClient.fetchTagDetail(widget.tagName, 1);
                   },
               );
               } else {

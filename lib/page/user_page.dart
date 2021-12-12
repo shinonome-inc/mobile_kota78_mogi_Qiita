@@ -54,7 +54,7 @@ class _UserPageViewState extends State<UserPageView> {
   late Future<List<Article>> userArticle;
   @override
   void initState() {
-    userArticle = QiitaClient.fetchUserArticle(widget.userData.id!);
+    userArticle = QiitaClient.fetchUserArticle(widget.userData.id!, 1);
     super.initState();
   }
 
@@ -204,7 +204,7 @@ class _UserPageViewState extends State<UserPageView> {
                   if (snapshot.hasData) {
                       return RefreshIndicator(
                         onRefresh: () async {
-                          userArticle = QiitaClient.fetchUserArticle(widget.userData.id!);
+                          userArticle = QiitaClient.fetchUserArticle(widget.userData.id!, 1);
                           },
                         child: (() {
                           if (snapshot.data?.isEmpty ?? true) {
@@ -224,7 +224,7 @@ class _UserPageViewState extends State<UserPageView> {
                   if (snapshot.hasError) {
                     return ErrorPage(
                       refreshFunction: () {
-                        userArticle = QiitaClient.fetchUserArticle(widget.userData.id!);
+                        userArticle = QiitaClient.fetchUserArticle(widget.userData.id!, 1);
                       },
                     );
                   } else {
