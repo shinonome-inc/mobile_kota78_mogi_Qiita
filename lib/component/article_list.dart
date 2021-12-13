@@ -7,16 +7,15 @@ import 'package:qiita_app1/model/article.dart';
 import 'package:intl/intl.dart';
 import 'package:qiita_app1/component/modal.dart';
 
-
 class ArticleListView extends StatefulWidget {
   final List<Article> articles;
   final String onFieldSubmitted;
   ArticleListView({Key? key,required this.articles, required this.onFieldSubmitted}) : super(key: key);
 
   @override
-  _ArticleListViewState createState() => _ArticleListViewState();
+  ArticleListViewState createState() => ArticleListViewState();
 }
-class _ArticleListViewState extends State<ArticleListView> {
+class ArticleListViewState extends State<ArticleListView> {
   QiitaClient qiitaClient = QiitaClient();
 
   List<Article>? _articles;

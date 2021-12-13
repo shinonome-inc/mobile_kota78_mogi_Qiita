@@ -17,6 +17,8 @@ class _FeedPageState extends State<FeedPage> {
 
   String _onFieldSubmitted = "";
   late Future<List<Article>> articleList;
+  GlobalKey<ArticleListViewState> _key = GlobalKey();
+
 
   @override
   void initState() {
@@ -57,11 +59,14 @@ class _FeedPageState extends State<FeedPage> {
         // ユーザーがフィールドのテキストの編集が完了したことを示したときに呼び出される
         onFieldSubmitted: (value) {
           print('onFieldSubmitted: $value');
-          setState(() {
-            _onFieldSubmitted = value;
-            articleList = QiitaClient.fetchArticle(_onFieldSubmitted, 1);
-          });
-        },
+          _onFieldSubmitted = value;
+          articleList = QiitaClient.fetchArticle(_onFieldSubmitted, 1);
+          articleList.then(
+                  (articleValue) {
+                    print(articleValue[0].title);
+                    _key.currentState!.setState(() {});
+                  });
+          },
       ),
     );
   }
@@ -114,6 +119,7 @@ class _FeedPageState extends State<FeedPage> {
                     articleList = QiitaClient.fetchArticle(_onFieldSubmitted, 1);
                   },
                   child: ArticleListView(
+                    key: _key,
                     articles: snapshot.data!,
                     onFieldSubmitted: _onFieldSubmitted,
                   ),
