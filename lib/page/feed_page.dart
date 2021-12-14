@@ -17,7 +17,6 @@ class _FeedPageState extends State<FeedPage> {
 
   String _onFieldSubmitted = "";
   late Future<List<Article>> articleList;
-  GlobalKey<ArticleListViewState> _key = GlobalKey();
 
 
   @override
@@ -56,17 +55,14 @@ class _FeedPageState extends State<FeedPage> {
             borderSide: BorderSide(color: Colors.redAccent, width: 1),
           ),
         ),
-        // ユーザーがフィールドのテキストの編集が完了したことを示したときに呼び出される
+        //ユーザーがフィールドのテキストの編集が完了したことを示したときに呼び出される
         onFieldSubmitted: (value) {
           print('onFieldSubmitted: $value');
-          _onFieldSubmitted = value;
-          articleList = QiitaClient.fetchArticle(_onFieldSubmitted, 1);
-          articleList.then(
-                  (articleValue) {
-                    print(articleValue[0].title);
-                    _key.currentState!.setState(() {});
-                  });
-          },
+          setState(() {
+            _onFieldSubmitted = value;
+            articleList = QiitaClient.fetchArticle(_onFieldSubmitted, 1);
+          });
+        },
       ),
     );
   }
@@ -113,20 +109,22 @@ class _FeedPageState extends State<FeedPage> {
             future: articleList,
             builder: (BuildContext context,
                 AsyncSnapshot<List<Article>> snapshot) {
-             if (snapshot.hasData) {
+              print(snapshot.connectionState);
+              if (snapshot.connectionState != ConnectionState.done) {
+                return CircularProgressIndicator();
+              }
+              if (snapshot.hasData) {
                 return RefreshIndicator(
                   onRefresh: () async {
-                    articleList = QiitaClient.fetchArticle(_onFieldSubmitted, 1);
+                    setState(() {
+                      articleList = QiitaClient.fetchArticle(_onFieldSubmitted, 1);
+                    });
                   },
                   child: ArticleListView(
-                    key: _key,
                     articles: snapshot.data!,
                     onFieldSubmitted: _onFieldSubmitted,
                   ),
                 );
-              }
-              if (snapshot.connectionState != ConnectionState.done) {
-                return CircularProgressIndicator();
               }
               if (snapshot.hasError) {
                 return ErrorPage(
