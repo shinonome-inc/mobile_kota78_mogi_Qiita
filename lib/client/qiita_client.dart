@@ -9,7 +9,10 @@ class QiitaClient {
 
   static Future<List<Article>> fetchArticle(String query, int pageNumber) async {
     print(pageNumber);
-    final _url = "https://qiita.com/api/v2/items?page=$pageNumber&per_page=20&query=$query";
+    final _url = (query == "")
+        ? "https://qiita.com/api/v2/items?page=$pageNumber&per_page=20"
+        : "https://qiita.com/api/v2/items?page=$pageNumber&per_page=20&query=$query"
+    ;
     final response = await http.get(
       Uri.parse(_url),
       headers: {
