@@ -37,7 +37,7 @@ class ArticleListViewState extends State<ArticleListView> {
     super.dispose();
   }
 
-  void _scrollListener() {
+  void _scrollListener() async {
     double positionRate =
         _scrollController!.offset / _scrollController!.position.maxScrollExtent;
     const threshold = 0.8;
@@ -45,12 +45,11 @@ class ArticleListViewState extends State<ArticleListView> {
       if (addPage) {
         pageNumber ++;
         addPage = false;
+        var fetchArticleData =
+            await QiitaClient.fetchArticle(widget.onFieldSubmitted, pageNumber);
         setState(() {
-          QiitaClient.fetchArticle(widget.onFieldSubmitted, pageNumber)
-              .then((value) {
-            _articles = _articles! + value;
-            addPage = true;
-          });
+          _articles = _articles! + fetchArticleData;
+          addPage = true;
         });
       }
     }
