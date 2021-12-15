@@ -120,3 +120,4 @@ app.*.symbols
 
 #TokenData
 /lib/client/token_data.dart
+.env
