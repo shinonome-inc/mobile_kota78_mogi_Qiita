@@ -3,9 +3,12 @@ import 'package:http/http.dart' as http;
 import 'package:qiita_app1/model/article.dart';
 import 'package:qiita_app1/model/tag.dart';
 import 'package:qiita_app1/model/user.dart';
-import 'package:qiita_app1/client/token_data.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class QiitaClient {
+
+  static String accessToken = env['ACCESS_TOKEN'] ?? "";
+  //static String accessToken = "727a80782b4e727e1a958abc6142bdf6499e36da";
 
   static Future<List<Article>> fetchArticle(String query, int pageNumber) async {
     print(pageNumber);
@@ -16,7 +19,7 @@ class QiitaClient {
     final response = await http.get(
       Uri.parse(_url),
       headers: {
-        'Authorization': 'Bearer ${TokenData.accessToken}',
+        'Authorization': 'Bearer $accessToken',
       },
     );
     if (response.statusCode == 200) {
@@ -34,7 +37,7 @@ class QiitaClient {
     final response = await http.get(
       Uri.parse(_url),
       headers: {
-        'Authorization': 'Bearer ${TokenData.accessToken}',
+        'Authorization': 'Bearer $accessToken',
       },
     );
     if (response.statusCode == 200) {
@@ -52,7 +55,7 @@ class QiitaClient {
     final response = await http.get(
       Uri.parse(_url),
       headers: {
-        'Authorization': 'Bearer ${TokenData.accessToken}',
+        'Authorization': 'Bearer $accessToken',
       },
     );
     if (response.statusCode == 200) {
@@ -70,7 +73,7 @@ class QiitaClient {
     final response = await http.get(
       Uri.parse(_url),
       headers: {
-        'Authorization': 'Bearer ${TokenData.accessToken}',
+        'Authorization': 'Bearer $accessToken',
       },
     );
     print(response.statusCode.toString());
@@ -90,7 +93,7 @@ class QiitaClient {
     final response = await http.get(
       Uri.parse(_url),
       headers: {
-        'Authorization': 'Bearer ${TokenData.accessToken}',
+        'Authorization': 'Bearer $accessToken',
       },
     );
     if (response.statusCode == 200) {
@@ -108,7 +111,7 @@ class QiitaClient {
     final response = await http.get(
       Uri.parse(_url),
       headers: {
-        'Authorization': 'Bearer ${TokenData.accessToken}',
+        'Authorization': 'Bearer $accessToken',
       },
     );
     if (response.statusCode == 200) {
@@ -126,7 +129,7 @@ class QiitaClient {
     final response = await http.get(
       Uri.parse(_url),
       headers: {
-        'Authorization': 'Bearer ${TokenData.accessToken}',
+        'Authorization': 'Bearer $accessToken',
       },
     );
     if (response.statusCode == 200) {
@@ -144,7 +147,7 @@ class QiitaClient {
     final response = await http.get(
       Uri.parse(_url),
       headers: {
-        'Authorization': 'Bearer ${TokenData.accessToken}',
+        'Authorization': 'Bearer $accessToken',
       },
     );
     print(response.statusCode.toString());
@@ -164,7 +167,7 @@ class QiitaClient {
     final response = await http.get(
       Uri.parse(_url),
       headers: {
-        'Authorization': 'Bearer ${TokenData.accessToken}',
+        'Authorization': 'Bearer $accessToken',
       },
     );
     if (response.statusCode == 200) {
