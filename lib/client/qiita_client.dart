@@ -8,7 +8,6 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 class QiitaClient {
 
   static String accessToken = env['ACCESS_TOKEN'] ?? "";
-  //static String accessToken = "727a80782b4e727e1a958abc6142bdf6499e36da";
 
   static Future<List<Article>> fetchArticle(String query, int pageNumber) async {
     print(pageNumber);
