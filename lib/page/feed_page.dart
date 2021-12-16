@@ -15,12 +15,13 @@ class FeedPage extends StatefulWidget {
 
 class _FeedPageState extends State<FeedPage> {
 
-  String onFieldSubmitted = "";
+  String _onFieldSubmitted = "";
   late Future<List<Article>> articleList;
+
 
   @override
   void initState() {
-    articleList = QiitaClient.fetchArticle("");
+    articleList = QiitaClient.fetchArticle("", 1);
     super.initState();
   }
 
@@ -54,11 +55,13 @@ class _FeedPageState extends State<FeedPage> {
             borderSide: BorderSide(color: Colors.redAccent, width: 1),
           ),
         ),
-        // ユーザーがフィールドのテキストの編集が完了したことを示したときに呼び出される
+        //ユーザーがフィールドのテキストの編集が完了したことを示したときに呼び出される
         onFieldSubmitted: (value) {
           print('onFieldSubmitted: $value');
-          onFieldSubmitted = value;
-          QiitaClient.fetchArticle(onFieldSubmitted);
+          setState(() {
+            _onFieldSubmitted = value;
+            articleList = QiitaClient.fetchArticle(_onFieldSubmitted, 1);
+          });
         },
       ),
     );
@@ -106,21 +109,27 @@ class _FeedPageState extends State<FeedPage> {
             future: articleList,
             builder: (BuildContext context,
                 AsyncSnapshot<List<Article>> snapshot) {
-             if (snapshot.hasData) {
-                return RefreshIndicator(
-                  onRefresh: () async {
-                    articleList = QiitaClient.fetchArticle(onFieldSubmitted);
-                  },
-                  child: ArticleListView(articles: snapshot.data!),
-                );
-              }
+              print(snapshot.connectionState);
               if (snapshot.connectionState != ConnectionState.done) {
                 return CircularProgressIndicator();
+              }
+              if (snapshot.hasData) {
+                return RefreshIndicator(
+                  onRefresh: () async {
+                    setState(() {
+                      articleList = QiitaClient.fetchArticle(_onFieldSubmitted, 1);
+                    });
+                  },
+                  child: ArticleListView(
+                    articles: snapshot.data!,
+                    onFieldSubmitted: _onFieldSubmitted,
+                  ),
+                );
               }
               if (snapshot.hasError) {
                 return ErrorPage(
                   refreshFunction: () {
-                    articleList = QiitaClient.fetchArticle("");
+                    articleList = QiitaClient.fetchArticle("", 1);
                   },
                 );
               } else {
@@ -132,5 +141,4 @@ class _FeedPageState extends State<FeedPage> {
       ),
     );
   }
-
 }

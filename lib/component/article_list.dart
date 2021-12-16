@@ -7,23 +7,61 @@ import 'package:qiita_app1/model/article.dart';
 import 'package:intl/intl.dart';
 import 'package:qiita_app1/component/modal.dart';
 
-
 class ArticleListView extends StatefulWidget {
   final List<Article> articles;
-  ArticleListView({Key? key,required this.articles}) : super(key: key);
+  final String onFieldSubmitted;
+  ArticleListView({Key? key,required this.articles, required this.onFieldSubmitted}) : super(key: key);
 
   @override
-  _ArticleListViewState createState() => _ArticleListViewState();
+  ArticleListViewState createState() => ArticleListViewState();
 }
-class _ArticleListViewState extends State<ArticleListView> {
+class ArticleListViewState extends State<ArticleListView> {
   QiitaClient qiitaClient = QiitaClient();
+
+  List<Article>? _articles;
+  int pageNumber = 1;
+  bool addPage = true;
+
+  ScrollController? _scrollController;
+  @override
+  void initState() {
+    super.initState();
+    _articles = widget.articles;
+    _scrollController = ScrollController();
+    _scrollController!.addListener(_scrollListener);
+  }
+
+  @override
+  void dispose() {
+    _scrollController!.dispose();
+    super.dispose();
+  }
+
+  void _scrollListener() async {
+    double positionRate =
+        _scrollController!.offset / _scrollController!.position.maxScrollExtent;
+    const threshold = 0.8;
+    if (positionRate > threshold) {
+      if (addPage) {
+        pageNumber ++;
+        addPage = false;
+        var fetchArticleData =
+            await QiitaClient.fetchArticle(widget.onFieldSubmitted, pageNumber);
+        setState(() {
+          _articles = _articles! + fetchArticleData;
+          addPage = true;
+        });
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      itemCount: widget.articles.length,
+      controller: _scrollController,
+      itemCount: _articles!.length,
       itemBuilder: (BuildContext context, int index) {
-        final article = widget.articles[index];
+        final article = _articles![index];
         DateTime dateTime = DateTime.parse(article.updatedAt);
         return Card(
           elevation: 0,
@@ -136,3 +174,4 @@ class _UserArticleListViewState extends State<UserArticleListView> {
     );
   }
 }
+

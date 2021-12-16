@@ -3,13 +3,18 @@ import 'package:http/http.dart' as http;
 import 'package:qiita_app1/model/article.dart';
 import 'package:qiita_app1/model/tag.dart';
 import 'package:qiita_app1/model/user.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class QiitaClient {
 
-  static String accessToken ="727a80782b4e727e1a958abc6142bdf6499e36da";
+  static String accessToken = env['ACCESS_TOKEN'] ?? "";
 
-  static Future<List<Article>> fetchArticle(String query) async {
-    final _url = "https://qiita.com/api/v2/items?page=1&per_page=20&query=" +query+ "%3AQiita";
+  static Future<List<Article>> fetchArticle(String query, int pageNumber) async {
+    print(pageNumber);
+    final _url = (query == "")
+        ? "https://qiita.com/api/v2/items?page=$pageNumber&per_page=20"
+        : "https://qiita.com/api/v2/items?page=$pageNumber&per_page=20&query=$query"
+    ;
     final response = await http.get(
       Uri.parse(_url),
       headers: {
@@ -44,8 +49,8 @@ class QiitaClient {
     }
   }
 
-  static Future<List<Article>> fetchTagDetail(String query) async {
-    final _url = "https://qiita.com/api/v2/items?page=1&per_page=20&query=" +query+ "%3AQiita";
+  static Future<List<Article>> fetchTagDetail(String query, int pageNumber) async {
+    final _url = "https://qiita.com/api/v2/items?page=$pageNumber&per_page=20&query=$query";
     final response = await http.get(
       Uri.parse(_url),
       headers: {
@@ -156,8 +161,8 @@ class QiitaClient {
     }
   }
 
-  static Future<List<Article>> fetchUserArticle(String userId) async {
-    final _url = "https://qiita.com/api/v2/items?page=1&per_page=20&query=" +userId+ "%3AQiita";
+  static Future<List<Article>> fetchUserArticle(String userId, int pageNumber) async {
+    final _url = "https://qiita.com/api/v2/items?page=$pageNumber&per_page=20&query=$userId";
     final response = await http.get(
       Uri.parse(_url),
       headers: {
