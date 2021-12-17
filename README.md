@@ -1,17 +1,3 @@
-# qiita_app1
-
-A new Flutter project.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
-# mobile_kota78_mogi_Qiita
+gitの管理下から外してあるファイルがありますので、下記よりダウンロードの上所定の場所へ追加をお願いします。
+[.env]<https://drive.google.com/file/d/1ziY7nwpTZQ7bw8pDJdPKRFuKQLJ92zxJ/view?usp=sharing>
+<img width="282" alt="Screen Shot 2021-12-17 at 23 05 15" src="https://user-images.githubusercontent.com/82959924/146558558-eec3b5d1-759f-42e2-90ff-796fa48deb79.png">
