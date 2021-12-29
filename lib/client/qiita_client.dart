@@ -4,12 +4,69 @@ import 'package:qiita_app1/model/article.dart';
 import 'package:qiita_app1/model/tag.dart';
 import 'package:qiita_app1/model/user.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class QiitaClient {
 
-  static String accessToken = env['ACCESS_TOKEN'] ?? "";
+  //static String accessToken    = env['ACCESS_TOKEN'] ?? "";
+  static final  clientID       = env['CLIENT_ID'] ?? "";
+  static final  clientSecret   = env['CLIENT_SECRET'] ?? "";
+  static final  keyAccessToken = 'qiita/accessToken';
+
+
+  static String createdAuthorizeUrl(String state) {
+    final scope = 'read_qiita%20write_qiita';
+    String _url = 'https://qiita.com/api/v2/oauth/authorize?client_id=$clientID&scope=$scope&state=$state';
+    return _url;
+  }
+
+  static Future<String> createAccessTokenFromCallbackUri(Uri uri,
+      String expectedState) async {
+    final String? state = uri.queryParameters['state'];
+    final String? code  = uri.queryParameters['code'];
+    if (expectedState != state) {
+      throw Exception('the state is different from expectedState');
+    }
+
+    final response = await http.post(
+      Uri.parse('https://qiita.com/api/v2/access_tokens'),
+      headers: {
+        'content-type': 'application/json',
+      },
+      body: jsonEncode({
+        'client_id': clientID,
+        'client_secret': clientSecret,
+        'code': code,
+      }),
+    );
+    final body = jsonDecode(response.body);
+    final accessTokenn = body['token'];
+
+    return accessTokenn;
+  }
+
+  static Future<void> saveAccessToken(String accessToken) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString(keyAccessToken, accessToken);
+  }
+
+  static Future<String?> getAccessToken() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString(keyAccessToken);
+  }
+
+  Future<void> deleteAccessToken() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.remove(keyAccessToken);
+  }
+
+  Future<bool> accessTokenIsSaved() async {
+    final accessToken = await getAccessToken();
+    return accessToken != null;
+  }
 
   static Future<List<Article>> fetchArticle(String query, int pageNumber) async {
+    final _accessToken = await getAccessToken();
     print(pageNumber);
     final _url = (query == "")
         ? "https://qiita.com/api/v2/items?page=$pageNumber&per_page=20"
@@ -18,7 +75,7 @@ class QiitaClient {
     final response = await http.get(
       Uri.parse(_url),
       headers: {
-        'Authorization': 'Bearer $accessToken',
+        'Authorization': 'Bearer $_accessToken',
       },
     );
     if (response.statusCode == 200) {
@@ -32,11 +89,12 @@ class QiitaClient {
   }
 
   static Future<List<Tag>> fetchTag() async {
+    final _accessToken = await getAccessToken();
     final _url = "https://qiita.com/api/v2/tags?page=1&per_page=20&sort=count";
     final response = await http.get(
       Uri.parse(_url),
       headers: {
-        'Authorization': 'Bearer $accessToken',
+        'Authorization': 'Bearer $_accessToken',
       },
     );
     if (response.statusCode == 200) {
@@ -50,11 +108,12 @@ class QiitaClient {
   }
 
   static Future<List<Article>> fetchTagDetail(String query, int pageNumber) async {
+    final _accessToken = await getAccessToken();
     final _url = "https://qiita.com/api/v2/items?page=$pageNumber&per_page=20&query=$query";
     final response = await http.get(
       Uri.parse(_url),
       headers: {
-        'Authorization': 'Bearer $accessToken',
+        'Authorization': 'Bearer $_accessToken',
       },
     );
     if (response.statusCode == 200) {
@@ -68,11 +127,12 @@ class QiitaClient {
   }
 
   static Future<User> fetchMyProfile() async {
+    final _accessToken = await getAccessToken();
     final _url = "https://qiita.com/api/v2/authenticated_user";
     final response = await http.get(
       Uri.parse(_url),
       headers: {
-        'Authorization': 'Bearer $accessToken',
+        'Authorization': 'Bearer $_accessToken',
       },
     );
     print(response.statusCode.toString());
@@ -88,11 +148,12 @@ class QiitaClient {
   }
 
   static Future<List<Article>> fetchMyArticle() async {
+    final _accessToken = await getAccessToken();
     final _url = "https://qiita.com/api/v2/authenticated_user/items";
     final response = await http.get(
       Uri.parse(_url),
       headers: {
-        'Authorization': 'Bearer $accessToken',
+        'Authorization': 'Bearer $_accessToken',
       },
     );
     if (response.statusCode == 200) {
@@ -106,11 +167,12 @@ class QiitaClient {
   }
 
   static Future<List<User>> fetchFollowers(String userId) async {
+    final _accessToken = await getAccessToken();
     final _url = "https://qiita.com/api/v2/users/$userId/followees";
     final response = await http.get(
       Uri.parse(_url),
       headers: {
-        'Authorization': 'Bearer $accessToken',
+        'Authorization': 'Bearer $_accessToken',
       },
     );
     if (response.statusCode == 200) {
@@ -124,11 +186,12 @@ class QiitaClient {
   }
 
   static Future<List<User>> fetchFollowees(String userId) async {
+    final _accessToken = await getAccessToken();
     final _url = "https://qiita.com/api/v2/users/$userId/followers";
     final response = await http.get(
       Uri.parse(_url),
       headers: {
-        'Authorization': 'Bearer $accessToken',
+        'Authorization': 'Bearer $_accessToken',
       },
     );
     if (response.statusCode == 200) {
@@ -142,11 +205,12 @@ class QiitaClient {
   }
 
   static Future<User> fetchUserProfile(String userId) async {
+    final _accessToken = await getAccessToken();
     final _url = "https://qiita.com/api/v2/users/$userId";
     final response = await http.get(
       Uri.parse(_url),
       headers: {
-        'Authorization': 'Bearer $accessToken',
+        'Authorization': 'Bearer $_accessToken',
       },
     );
     print(response.statusCode.toString());
@@ -162,11 +226,12 @@ class QiitaClient {
   }
 
   static Future<List<Article>> fetchUserArticle(String userId, int pageNumber) async {
+    final _accessToken = await getAccessToken();
     final _url = "https://qiita.com/api/v2/items?page=$pageNumber&per_page=20&query=$userId";
     final response = await http.get(
       Uri.parse(_url),
       headers: {
-        'Authorization': 'Bearer $accessToken',
+        'Authorization': 'Bearer $_accessToken',
       },
     );
     if (response.statusCode == 200) {

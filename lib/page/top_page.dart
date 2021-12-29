@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:qiita_app1/root.dart';
 import 'package:qiita_app1/page/error_page.dart';
+import 'package:qiita_app1/component/login.dart';
 
 class TopPage extends StatefulWidget {
   TopPage(
@@ -12,7 +13,6 @@ class TopPage extends StatefulWidget {
   @override
   _TopPageState createState() => _TopPageState();
 }
-
 class _TopPageState extends State<TopPage> {
   var isShowErrorView = false;
   @override
@@ -52,9 +52,14 @@ class _TopPageState extends State<TopPage> {
                     clipBehavior: Clip.antiAlias,
                     child: InkWell(
                       onTap:() {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(builder: (context) => Root()),
+                        showModalBottomSheet(
+                            enableDrag: true,
+                            backgroundColor: Colors.transparent,
+                            context: context,
+                            isScrollControlled: true,
+                            builder: (BuildContext context) {
+                              return Login();
+                            }
                         );
                       },
                       child: Container(
@@ -77,6 +82,10 @@ class _TopPageState extends State<TopPage> {
                 GestureDetector(
                   onTap: (){
                     print('Without LogIn is tapped');
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => Root()),
+                    );
                     },
                   child: Text(
                     "ログインせずに利用する",
