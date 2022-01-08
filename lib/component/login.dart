@@ -19,7 +19,7 @@ class _LoginState extends State<Login> {
   double _webViewHeight = 1;
   late WebViewController _webViewController;
 
-  String? _state;
+  String? _urlRedirectionState;
   String? url;
   late final Uri uri;
   bool _isLoading = false;
@@ -27,9 +27,9 @@ class _LoginState extends State<Login> {
   @override
   void initState() {
     super.initState();
-    _state = _randomString(40);
-    print(_state);
-    url = QiitaClient.createdAuthorizeUrl(_state!);
+    _urlRedirectionState = _randomString(40);
+    print(_urlRedirectionState);
+    url = QiitaClient.createdAuthorizeUrl(_urlRedirectionState!);
   }
 
   Future<void> _onPageFinished(BuildContext context, String url) async {
@@ -86,7 +86,7 @@ class _LoginState extends State<Login> {
                         onPageStarted: (String url) {
                           setState(() {
                             _isLoading = true;
-                            print(_state);
+                            print(_urlRedirectionState);
                           });
                         },
                         onPageFinished: (String url) {
@@ -117,7 +117,7 @@ class _LoginState extends State<Login> {
   }
   void _onAuthorizeCallbackIsCalled(Uri uri) async {
 
-    final accessToken = await QiitaClient.createAccessTokenFromCallbackUri(uri, _state!);
+    final accessToken = await QiitaClient.createAccessTokenFromCallbackUri(uri, _urlRedirectionState!);
     print('[accessToken]: $accessToken');
     await QiitaClient.saveAccessToken(accessToken);
 
@@ -125,6 +125,7 @@ class _LoginState extends State<Login> {
       MaterialPageRoute(builder: (_) => Root()),
     );
   }
+  //CSRF対策のためクエリに含めるstateの値を生成
   String _randomString(int length) {
     final chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
     final rand = Random.secure();
