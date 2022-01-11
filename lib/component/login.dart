@@ -86,19 +86,19 @@ class _LoginState extends State<Login> {
                         onPageStarted: (String url) {
                           setState(() {
                             _isLoading = true;
-                            print(_urlRedirectionState);
                           });
+                          print(_urlRedirectionState);
                         },
                         onPageFinished: (String url) {
                           setState(() {
                             _isLoading = false;
-                            print(url);
-                            final uri = Uri.parse(url);
-                            if(uri.queryParameters['code'] != null) {
-                              _onAuthorizeCallbackIsCalled(uri);
-                            }
-                            _onPageFinished(context, url);
                           });
+                          print(url);
+                          final uri = Uri.parse(url);
+                          if(uri.queryParameters['code'] != null) {
+                            _onAuthorizeCallbackIsCalled(uri);
+                          }
+                          _onPageFinished(context, url);
                         },
                         onWebViewCreated: (controller) {
                           _webViewController = controller;
