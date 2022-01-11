@@ -90,7 +90,7 @@ class _LoginState extends State<Login> {
                           });
                         },
                         onPageFinished: (String url) {
-                          setState(() async {
+                          setState(() {
                             _isLoading = false;
                             print(url);
                             final uri = Uri.parse(url);
@@ -100,7 +100,7 @@ class _LoginState extends State<Login> {
                             _onPageFinished(context, url);
                           });
                         },
-                        onWebViewCreated: (controller) async {
+                        onWebViewCreated: (controller) {
                           _webViewController = controller;
                         },
                         javascriptMode: JavascriptMode.unrestricted,
