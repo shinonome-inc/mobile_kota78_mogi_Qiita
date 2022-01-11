@@ -89,7 +89,7 @@ class _LoginState extends State<Login> {
                           });
                           print(_urlRedirectionState);
                         },
-                        onPageFinished: (String url) {
+                        onPageFinished: (String url) async {
                           setState(() {
                             _isLoading = false;
                           });
@@ -98,7 +98,7 @@ class _LoginState extends State<Login> {
                           if(uri.queryParameters['code'] != null) {
                             _onAuthorizeCallbackIsCalled(uri);
                           }
-                          _onPageFinished(context, url);
+                          await _onPageFinished(context, url);
                         },
                         onWebViewCreated: (controller) {
                           _webViewController = controller;
