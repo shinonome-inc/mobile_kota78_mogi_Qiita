@@ -14,8 +14,7 @@ class _SettingPageState extends State<SettingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar:AppBar(
-          bottomOpacity: 0.0,
+        appBar: AppBar(
           elevation: 0.0,
           backgroundColor: Colors.white,
           title: Text(
