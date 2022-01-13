@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:qiita_app1/page/top_page.dart';
+import 'package:qiita_app1/root.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart' as DotEnv;
 
 Future main() async {
@@ -12,7 +13,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      home: TopPage(),
+      initialRoute: '/',
+      routes: <String, WidgetBuilder> {
+        '/': (BuildContext context) => TopPage(),
+        '/root': (BuildContext context) => Root(),
+      },
     );
   }
 }

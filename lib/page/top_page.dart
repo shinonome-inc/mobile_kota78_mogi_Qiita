@@ -82,10 +82,7 @@ class _TopPageState extends State<TopPage> {
                 GestureDetector(
                   onTap: (){
                     print('Without LogIn is tapped');
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (context) => Root()),
-                    );
+                    Navigator.of(context).pushReplacementNamed("/root");
                     },
                   child: Text(
                     "ログインせずに利用する",

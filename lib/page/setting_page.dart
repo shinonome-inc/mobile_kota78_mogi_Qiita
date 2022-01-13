@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:qiita_app1/client/qiita_client.dart';
 import 'package:qiita_app1/constants.dart';
 import 'package:qiita_app1/hex_color.dart';
 
@@ -143,7 +144,11 @@ class _SettingPageState extends State<SettingPage> {
                 ),
               ),
               InkWell(
-                onTap: () {print("LogOut is tapped");},
+                onTap: () async {
+                  print("LogOut is tapped");
+                  await QiitaClient.deleteAccessToken();
+                  Navigator.of(context).pushReplacementNamed("/");
+                  },
                 child: Container(
                   constraints: BoxConstraints.tightForFinite(height: 50),
                   decoration: BoxDecoration(color: Colors.white),
