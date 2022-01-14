@@ -7,6 +7,7 @@ import 'package:qiita_app1/client/qiita_client.dart';
 import 'package:qiita_app1/model/article.dart';
 import 'package:qiita_app1/page/follow_follower_page.dart';
 import 'package:qiita_app1/page/error_page.dart';
+import 'package:qiita_app1/page/top_page.dart';
 
 class MyPage extends StatefulWidget {
 
@@ -16,10 +17,16 @@ class MyPage extends StatefulWidget {
 
 class _MyPageState extends State<MyPage> {
   late Future<User> myProfile;
+  bool _accessTokenIsSaved = false;
   @override
   void initState() {
     myProfile = QiitaClient.fetchMyProfile();
     super.initState();
+    substituteBool();
+  }
+
+  void substituteBool() async {
+    _accessTokenIsSaved = await QiitaClient.accessTokenIsSaved();
   }
 
   @override
@@ -52,6 +59,9 @@ class _MyPageState extends State<MyPage> {
                     alignment: Alignment.center,
                     child: CircularProgressIndicator()
                 );
+              }
+              if (_accessTokenIsSaved == false) {
+                return IsNotLogInView();
               }
               if (snapshot.hasError) {
                 return ErrorPage(
@@ -264,6 +274,75 @@ class _MyPageViewState extends State<MyPageView> {
             ),
           ],
         ),
+      ],
+    );
+  }
+}
+
+class IsNotLogInView extends StatefulWidget {
+  const IsNotLogInView({Key? key}) : super(key: key);
+
+  @override
+  _IsNotLogInViewState createState() => _IsNotLogInViewState();
+}
+
+class _IsNotLogInViewState extends State<IsNotLogInView> {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Expanded(child: Container()),
+        Text(
+          'ログインが必要です',
+          style: TextStyle(
+            fontSize: 14,
+            color: HexColor(Constants.black),
+          ),
+        ),
+        SizedBox(height: 6),
+        Text(
+          'マイページの機能を利用するには\nログインを行っていただく必要があります。',
+          style: TextStyle(
+            fontSize: 12,
+            color: HexColor(Constants.grey),
+          ),
+          textAlign: TextAlign.center,
+        ),
+        Expanded(child: Container()),
+        Row(
+          children: [
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(24.0),
+                child: Material(
+                  color: HexColor("#74C13A"),
+                  borderRadius: BorderRadius.all(Radius.circular(25.0)),
+                  clipBehavior: Clip.antiAlias,
+                  child: InkWell(
+                    onTap:() {
+                      Navigator.of(context, rootNavigator: true).pushReplacement(MaterialPageRoute(builder: (context) => TopPage()));
+                    },
+                    child: Container(
+                      height: 50,
+                      child: Center(
+                        child: Text(
+                          'ログインする',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              color: HexColor("#F9FCFF"),
+                              fontSize: 14.0,
+                              fontWeight: FontWeight.w700
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+        SizedBox(height: 8),
       ],
     );
   }

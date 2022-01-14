@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:qiita_app1/root.dart';
 import 'package:qiita_app1/page/error_page.dart';
 import 'package:qiita_app1/component/login.dart';
 
