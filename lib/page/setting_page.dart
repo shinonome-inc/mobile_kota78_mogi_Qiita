@@ -26,6 +26,7 @@ class _SettingPageState extends State<SettingPage> {
               fontFamily: "Pacifico",
             ),
           ),
+          automaticallyImplyLeading: false,
         ),
         body: Stack(
           children: <Widget>[

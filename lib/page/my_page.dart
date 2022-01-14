@@ -121,7 +121,7 @@ class _MyPageViewState extends State<MyPageView> {
                         widget.userData.userName ?? "ユーザー名未設定",
                         style: TextStyle(
                           color: HexColor(Constants.black),
-                          fontSize: 20
+                          fontSize: 20,
                         ),
                       ),
                     ),
@@ -129,7 +129,7 @@ class _MyPageViewState extends State<MyPageView> {
                       "@${widget.userData.id ?? "id未設定"}",
                       style: TextStyle(
                         color: HexColor(Constants.darkGrey),
-                        fontSize: 12
+                        fontSize: 12,
                       ),
                     ),
                     Padding(
@@ -152,8 +152,8 @@ class _MyPageViewState extends State<MyPageView> {
                           child: RichText(
                               text: TextSpan(
                                   style: TextStyle(
-                                      fontSize: 12,
-                                      color: HexColor(Constants.black)
+                                    fontSize: 12,
+                                    color: HexColor(Constants.black),
                                   ),
                                   children: [
                                     TextSpan(
@@ -183,7 +183,7 @@ class _MyPageViewState extends State<MyPageView> {
                           child: RichText(
                               text: TextSpan(
                                   style: TextStyle(
-                                      color: HexColor(Constants.black)
+                                    color: HexColor(Constants.black),
                                   ),
                                   children: [
                                     TextSpan(
@@ -231,18 +231,18 @@ class _MyPageViewState extends State<MyPageView> {
                 future: myArticleList,
                 builder: (BuildContext context, AsyncSnapshot<List<Article>> snapshot) {
                   if (snapshot.hasData) {
-                      return RefreshIndicator(
-                        onRefresh: () async {
-                          myArticleList = QiitaClient.fetchMyArticle();
-                          },
-                        child: (() {
-                          if (snapshot.data?.isEmpty ?? true) {
-                            return Center(child: Text("まだ投稿がありません"));
-                          } else {
-                            return UserArticleListView(articles: snapshot.data!);
-                          }
-                        })(),
-                      );
+                    return RefreshIndicator(
+                      onRefresh: () async {
+                        myArticleList = QiitaClient.fetchMyArticle();
+                      },
+                      child: (() {
+                        if (snapshot.data?.isEmpty ?? true) {
+                          return Center(child: Text("まだ投稿がありません"));
+                        } else {
+                          return UserArticleListView(articles: snapshot.data!);
+                        }
+                      })(),
+                    );
                   }
                   if (snapshot.connectionState != ConnectionState.done) {
                     return Container(
