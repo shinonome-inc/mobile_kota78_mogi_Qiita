@@ -210,7 +210,10 @@ class _UserPageViewState extends State<UserPageView> {
                           if (snapshot.data?.isEmpty ?? true) {
                             return Center(child: Text("まだ投稿がありません"));
                           } else {
-                            return UserArticleListView(articles: snapshot.data!);
+                            return UserArticleListView(
+                              articles: snapshot.data!,
+                              userId: widget.userData.id!,
+                            );
                           }
                         })(),
                       );

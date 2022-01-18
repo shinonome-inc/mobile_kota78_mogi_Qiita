@@ -4,6 +4,7 @@ import 'package:qiita_app1/hex_color.dart';
 import 'package:qiita_app1/model/tag.dart';
 import 'package:qiita_app1/page/tag_detail_page.dart';
 import 'package:qiita_app1/constants.dart';
+import 'package:qiita_app1/client/qiita_client.dart';
 
 
 class TagListView extends StatefulWidget {
@@ -16,18 +17,57 @@ class TagListView extends StatefulWidget {
 
 class _TagListViewState extends State<TagListView> {
 
+  List<Tag>? _tags;
+  int pageNumber = 1;
+  bool addPage = true;
+
+  ScrollController? _scrollController;
+  @override
+  void initState() {
+    super.initState();
+    _tags = widget.tags;
+    _scrollController = ScrollController();
+    _scrollController!.addListener(_scrollListener);
+  }
+
+  @override
+  void dispose() {
+    _scrollController!.dispose();
+    super.dispose();
+  }
+
+  void _scrollListener() async {
+    double positionRate =
+        _scrollController!.offset / _scrollController!.position.maxScrollExtent;
+    const threshold = 0.8;
+    if (positionRate > threshold) {
+      if (addPage) {
+        pageNumber ++;
+        addPage = false;
+        var fetchTagData =
+        await QiitaClient.fetchTag(pageNumber);
+        setState(() {
+          _tags = _tags! + fetchTagData;
+          addPage = true;
+        });
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(10.0),
       child: GridView.builder(
+        controller: _scrollController,
+        itemCount: _tags!.length,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           childAspectRatio: 162 / 138,
           crossAxisCount: 2,
         ),
-        itemCount: widget.tags.length,
+        //itemCount: widget.tags.length,
         itemBuilder: (BuildContext context, int index) {
-          final tag = widget.tags[index];
+          final tag = _tags![index];
           return Padding(
             padding: const EdgeInsets.all(8.0),
             child: Material(

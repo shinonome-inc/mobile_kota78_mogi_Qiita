@@ -93,9 +93,10 @@ class QiitaClient {
     }
   }
 
-  static Future<List<Tag>> fetchTag() async {
+  static Future<List<Tag>> fetchTag(int pageNumber) async {
     final header = await getHeader();
-    final _url = "https://qiita.com/api/v2/tags?page=1&per_page=20&sort=count";
+    print(pageNumber);
+    final _url = "https://qiita.com/api/v2/tags?page=$pageNumber&per_page=20&sort=count";
     final response = await http.get(
       Uri.parse(_url),
         headers: header
@@ -222,6 +223,7 @@ class QiitaClient {
 
   static Future<List<Article>> fetchUserArticle(String userId, int pageNumber) async {
     final header = await getHeader();
+    print(pageNumber);
     final _url = "https://qiita.com/api/v2/items?page=$pageNumber&per_page=20&query=$userId";
     final response = await http.get(
       Uri.parse(_url),
