@@ -125,7 +125,7 @@ class _UserArticleListViewState extends State<UserArticleListView> {
   List<Article>? _articles;
   int pageNumber = 1;
   bool addPage = true;
-  String? _userId = "";
+  String _userId = "";
 
   ScrollController? _scrollController;
   @override
@@ -154,7 +154,7 @@ class _UserArticleListViewState extends State<UserArticleListView> {
         var fetchUserArticleData =
         (widget.userId == "")
         ? await QiitaClient.fetchMyArticle()
-        : await QiitaClient.fetchUserArticle(_userId!, pageNumber);
+        : await QiitaClient.fetchUserArticle(_userId, pageNumber);
         setState(() {
           _articles = _articles! + fetchUserArticleData;
           addPage = true;
