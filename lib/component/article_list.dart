@@ -147,8 +147,7 @@ class _UserArticleListViewState extends State<UserArticleListView> {
     double positionRate =
         _scrollController!.offset / _scrollController!.position.maxScrollExtent;
     const threshold = 0.8;
-    if (positionRate > threshold) {
-      if (addPage) {
+    if (positionRate > threshold && addPage) {
         pageNumber ++;
         addPage = false;
         var fetchUserArticleData =
@@ -159,7 +158,6 @@ class _UserArticleListViewState extends State<UserArticleListView> {
           _articles = _articles! + fetchUserArticleData;
           addPage = true;
         });
-      }
     }
   }
 
