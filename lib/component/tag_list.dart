@@ -17,7 +17,7 @@ class TagListView extends StatefulWidget {
 
 class _TagListViewState extends State<TagListView> {
 
-  List<Tag>? _tags;
+  List<Tag> _tags = [];
   int pageNumber = 1;
   bool addPage = true;
 
@@ -47,7 +47,7 @@ class _TagListViewState extends State<TagListView> {
         var fetchTagData =
         await QiitaClient.fetchTag(pageNumber);
         setState(() {
-          _tags = _tags! + fetchTagData;
+          _tags = _tags + fetchTagData;
           addPage = true;
         });
       }
@@ -60,14 +60,14 @@ class _TagListViewState extends State<TagListView> {
       padding: const EdgeInsets.all(10.0),
       child: GridView.builder(
         controller: _scrollController,
-        itemCount: _tags!.length,
+        itemCount: _tags.length,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           childAspectRatio: 162 / 138,
           crossAxisCount: 2,
         ),
         //itemCount: widget.tags.length,
         itemBuilder: (BuildContext context, int index) {
-          final tag = _tags![index];
+          final tag = _tags[index];
           return Padding(
             padding: const EdgeInsets.all(8.0),
             child: Material(
