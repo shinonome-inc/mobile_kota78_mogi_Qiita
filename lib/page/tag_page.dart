@@ -13,9 +13,10 @@ class TagPage extends StatefulWidget {
 
 class _TagPageState extends State<TagPage> {
   late Future<List<Tag>> tagList;
+
   @override
   void initState() {
-    tagList = QiitaClient.fetchTag();
+    tagList = QiitaClient.fetchTag(1);
     super.initState();
   }
 
@@ -47,7 +48,7 @@ class _TagPageState extends State<TagPage> {
               if (snapshot.hasData) {
                 return RefreshIndicator(
                   onRefresh: () async {
-                    tagList = QiitaClient.fetchTag();
+                    tagList = QiitaClient.fetchTag(1);
                   },
                   child: TagListView(tags: snapshot.requireData),
                 );
@@ -58,7 +59,7 @@ class _TagPageState extends State<TagPage> {
               if (snapshot.hasError) {
                 return ErrorPage(
                   refreshFunction: () {
-                    tagList = QiitaClient.fetchTag();
+                    tagList = QiitaClient.fetchTag(1);
                   },
                 );
               } else {

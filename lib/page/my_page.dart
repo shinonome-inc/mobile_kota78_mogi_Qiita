@@ -249,7 +249,10 @@ class _MyPageViewState extends State<MyPageView> {
                         if (snapshot.data?.isEmpty ?? true) {
                           return Center(child: Text("まだ投稿がありません"));
                         } else {
-                          return UserArticleListView(articles: snapshot.data!);
+                          return UserArticleListView(
+                            articles: snapshot.data!,
+                            userId: "",
+                          );
                         }
                       })(),
                     );

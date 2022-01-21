@@ -22,24 +22,24 @@ class ArticleListViewState extends State<ArticleListView> {
   int pageNumber = 1;
   bool addPage = true;
 
-  ScrollController? _scrollController;
+  late ScrollController _scrollController;
   @override
   void initState() {
     super.initState();
     _articles = widget.articles;
     _scrollController = ScrollController();
-    _scrollController!.addListener(_scrollListener);
+    _scrollController.addListener(_scrollListener);
   }
 
   @override
   void dispose() {
-    _scrollController!.dispose();
+    _scrollController.dispose();
     super.dispose();
   }
 
   void _scrollListener() async {
     double positionRate =
-        _scrollController!.offset / _scrollController!.position.maxScrollExtent;
+        _scrollController.offset / _scrollController.position.maxScrollExtent;
     const threshold = 0.8;
     if (positionRate > threshold) {
       if (addPage) {
@@ -113,7 +113,8 @@ class ArticleListViewState extends State<ArticleListView> {
 
 class UserArticleListView extends StatefulWidget {
   final List<Article> articles;
-  UserArticleListView({Key? key,required this.articles}) : super(key: key);
+  final String userId;
+  UserArticleListView({Key? key,required this.articles, required this.userId,}) : super(key: key);
 
   @override
   _UserArticleListViewState createState() => _UserArticleListViewState();
@@ -121,12 +122,52 @@ class UserArticleListView extends StatefulWidget {
 class _UserArticleListViewState extends State<UserArticleListView> {
   QiitaClient qiitaClient = QiitaClient();
 
+  List<Article> _articles = [];
+  int pageNumber = 1;
+  bool addPage = true;
+  String _userId = "";
+
+  late ScrollController _scrollController;
+  @override
+  void initState() {
+    super.initState();
+    _articles = widget.articles;
+    _userId = widget.userId;
+    _scrollController = ScrollController();
+    _scrollController.addListener(_scrollListener);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _scrollListener() async {
+    double positionRate =
+        _scrollController.offset / _scrollController.position.maxScrollExtent;
+    const threshold = 0.8;
+    if (positionRate > threshold && addPage) {
+        pageNumber ++;
+        addPage = false;
+        var fetchUserArticleData =
+        (widget.userId == "")
+        ? await QiitaClient.fetchMyArticle()
+        : await QiitaClient.fetchUserArticle(_userId, pageNumber);
+        setState(() {
+          _articles = _articles + fetchUserArticleData;
+          addPage = true;
+        });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      itemCount: widget.articles.length,
+      controller: _scrollController,
+      itemCount: _articles.length,
       itemBuilder: (BuildContext context, int index) {
-        final article = widget.articles[index];
+        final article = _articles[index];
         DateTime dateTime = DateTime.parse(article.updatedAt);
         return Card(
           elevation: 0,
