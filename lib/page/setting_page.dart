@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:qiita_app1/client/qiita_client.dart';
 import 'package:qiita_app1/constants.dart';
 import 'package:qiita_app1/hex_color.dart';
+import 'package:qiita_app1/page/top_page.dart';
 
 class SettingPage extends StatefulWidget {
   const SettingPage({Key? key}) : super(key: key);
@@ -11,6 +12,17 @@ class SettingPage extends StatefulWidget {
 }
 
 class _SettingPageState extends State<SettingPage> {
+
+  bool _accessTokenIsSaved = false;
+  @override
+  void initState() {
+    super.initState();
+    substituteBool();
+  }
+
+  void substituteBool() async {
+    _accessTokenIsSaved = await QiitaClient.accessTokenIsSaved();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -147,8 +159,51 @@ class _SettingPageState extends State<SettingPage> {
               InkWell(
                 onTap: () async {
                   print("LogOut is tapped");
-                  await QiitaClient.deleteAccessToken();
-                  Navigator.of(context).pushReplacementNamed("/");
+                  _accessTokenIsSaved
+                  ? showDialog(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (_) {
+                      return AlertDialog(
+                        title: Text("ログアウトしますか？"),
+                        actions: [
+                          TextButton(
+                            child: Text("キャンセル"),
+                            onPressed: () => Navigator.pop(context),
+                          ),
+                          TextButton(
+                            child: Text("OK"),
+                            onPressed: () async {
+                              await QiitaClient.deleteAccessToken();
+                              Navigator.of(context).pushReplacementNamed("/");
+                            }
+                          ),
+                        ],
+                      );
+                    },
+                  )
+                  : showDialog(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (_) {
+                      return AlertDialog(
+                        title: Text("ログインしていません"),
+                        content: Text("ログインしますか？"),
+                        actions: [
+                          TextButton(
+                            child: Text("No"),
+                            onPressed: () => Navigator.pop(context),
+                          ),
+                          TextButton(
+                              child: Text("Yes"),
+                              onPressed: () {
+                                Navigator.of(context, rootNavigator: true).pushReplacement(MaterialPageRoute(builder: (context) => TopPage()));
+                              }
+                          ),
+                        ],
+                      );
+                    },
+                  );
                   },
                 child: Container(
                   constraints: BoxConstraints.tightForFinite(height: 50),
