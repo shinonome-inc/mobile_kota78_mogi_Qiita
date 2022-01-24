@@ -63,8 +63,16 @@ class QiitaClient {
   }
 
   static Future<void> deleteAccessToken() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.remove(keyAccessToken);
+    final _accessToken = await getAccessToken();
+    String url = "https://qiita.com/api/v2/access_tokens/$_accessToken";
+    final response = await http.delete(Uri.parse(url));
+    print(response.statusCode);
+    if (response.statusCode == 204) {
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.remove(keyAccessToken);
+    } else {
+      throw Exception('Failed to delete');
+    }
   }
 
   static Future<bool> accessTokenIsSaved() async {
