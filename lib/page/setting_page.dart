@@ -159,51 +159,7 @@ class _SettingPageState extends State<SettingPage> {
               InkWell(
                 onTap: () async {
                   print("LogOut is tapped");
-                  _accessTokenIsSaved
-                  ? showDialog(
-                    context: context,
-                    barrierDismissible: false,
-                    builder: (_) {
-                      return AlertDialog(
-                        title: Text("ログアウトしますか？"),
-                        actions: [
-                          TextButton(
-                            child: Text("キャンセル"),
-                            onPressed: () => Navigator.pop(context),
-                          ),
-                          TextButton(
-                            child: Text("OK"),
-                            onPressed: () async {
-                              await QiitaClient.deleteAccessToken();
-                              Navigator.of(context).pushReplacementNamed("/");
-                            }
-                          ),
-                        ],
-                      );
-                    },
-                  )
-                  : showDialog(
-                    context: context,
-                    barrierDismissible: false,
-                    builder: (_) {
-                      return AlertDialog(
-                        title: Text("ログインしていません"),
-                        content: Text("ログインしますか？"),
-                        actions: [
-                          TextButton(
-                            child: Text("No"),
-                            onPressed: () => Navigator.pop(context),
-                          ),
-                          TextButton(
-                              child: Text("Yes"),
-                              onPressed: () {
-                                Navigator.of(context, rootNavigator: true).pushReplacement(MaterialPageRoute(builder: (context) => TopPage()));
-                              }
-                          ),
-                        ],
-                      );
-                    },
-                  );
+                  showLogoutDialog(context);
                   },
                 child: Container(
                   constraints: BoxConstraints.tightForFinite(height: 50),
@@ -212,7 +168,7 @@ class _SettingPageState extends State<SettingPage> {
                     children: [
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 20.0),
-                        child: Text("ログアウトする"),
+                        child: Text(_accessTokenIsSaved ? "ログアウトする" : "ログインする"),
                       ),
                       Expanded(child: Container()),
                     ],
@@ -294,6 +250,55 @@ class _SettingPageState extends State<SettingPage> {
         ],
       ),
     );
+  }
+
+  void showLogoutDialog(BuildContext context) {
+    if (_accessTokenIsSaved) {
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) {
+          return AlertDialog(
+            title: Text("ログアウトしますか？"),
+            actions: [
+              TextButton(
+                child: Text("キャンセル"),
+                onPressed: () => Navigator.pop(context),
+              ),
+              TextButton(
+                  child: Text("OK"),
+                  onPressed: () async {
+                    await QiitaClient.deleteAccessToken();
+                    Navigator.of(context).pushReplacementNamed("/");
+                  }
+              ),
+            ],
+          );
+        },
+      );
+    } else {
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) {
+          return AlertDialog(
+            title: Text("ログインしますか？"),
+            actions: [
+              TextButton(
+                child: Text("キャンセル"),
+                onPressed: () => Navigator.pop(context),
+              ),
+              TextButton(
+                  child: Text("OK"),
+                  onPressed: () {
+                    Navigator.of(context, rootNavigator: true).pushReplacement(MaterialPageRoute(builder: (context) => TopPage()));
+                  }
+              ),
+            ],
+          );
+        },
+      );
+    }
   }
 
   var privacy =
