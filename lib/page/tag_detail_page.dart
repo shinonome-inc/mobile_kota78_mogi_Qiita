@@ -25,6 +25,13 @@ class _TagDetailPageState extends State<TagDetailPage> {
     super.initState();
   }
 
+  Future<void> _refreshFunction() async {
+    var _tagDetailList = QiitaClient.fetchTagDetail(widget.tagName, 1);
+    setState(() {
+      tagDetailList = _tagDetailList;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -65,10 +72,14 @@ class _TagDetailPageState extends State<TagDetailPage> {
           child: FutureBuilder<List<Article>>(
             future: tagDetailList,
             builder: (context, snapshot) {
+              print(snapshot.connectionState);
+              if (snapshot.connectionState != ConnectionState.done) {
+                return CircularProgressIndicator();
+              }
               if (snapshot.hasData) {
                 return RefreshIndicator(
                   onRefresh: () async {
-                    tagDetailList = QiitaClient.fetchTagDetail(widget.tagName, 1);
+                    _refreshFunction();
                   },
                   child: ArticleListView(
                     articles: snapshot.data!,
@@ -76,13 +87,10 @@ class _TagDetailPageState extends State<TagDetailPage> {
                   ),
                 );
               }
-              if (snapshot.connectionState != ConnectionState.done) {
-                return CircularProgressIndicator();
-              }
               if (snapshot.hasError) {
               return ErrorPage(
                 refreshFunction: () {
-                  tagDetailList = QiitaClient.fetchTagDetail(widget.tagName, 1);
+                  _refreshFunction();
                   },
               );
               } else {
