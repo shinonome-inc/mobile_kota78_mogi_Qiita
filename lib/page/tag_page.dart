@@ -4,6 +4,8 @@ import 'package:qiita_app1/client/qiita_client.dart';
 import 'package:qiita_app1/model/tag.dart';
 import 'package:qiita_app1/component/tag_list.dart';
 import 'package:qiita_app1/page/error_page.dart';
+import 'package:qiita_app1/hex_color.dart';
+import 'package:qiita_app1/constants.dart';
 
 class TagPage extends StatefulWidget {
   const TagPage({Key? key}) : super(key: key);
@@ -39,6 +41,7 @@ class _TagPageState extends State<TagPage> {
               fontFamily: "Pacifico",
             ),
           ),
+          shape: Border(bottom: BorderSide(color: HexColor(Constants.grey), width: 0.3)),
         ),
         body: Center(
           child:FutureBuilder<List<Tag>>(

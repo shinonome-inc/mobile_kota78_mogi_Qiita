@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:qiita_app1/hex_color.dart';
 import 'package:qiita_app1/page/feed_page.dart';
 import 'package:qiita_app1/page/tag_page.dart';
 import 'package:qiita_app1/page/my_page.dart';
@@ -41,8 +42,9 @@ class _RootState extends State<Root> {
           BottomNavigationBarItem(icon: Icon(Icons.perm_identity_outlined),label: "マイページ"),
           BottomNavigationBarItem(icon: Icon(Icons.settings_outlined),label: "設定"),
       ],
-      currentIndex: _selectedIndex,
+        currentIndex: _selectedIndex,
         onTap: _onItemTap,
+        selectedItemColor: HexColor("#74C13A"),
       ),
     );
   }

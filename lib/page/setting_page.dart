@@ -41,6 +41,7 @@ class _SettingPageState extends State<SettingPage> {
             ),
           ),
           automaticallyImplyLeading: false,
+          shape: Border(bottom: BorderSide(color: HexColor(Constants.grey), width: 0.3)),
         ),
         body: Stack(
           children: <Widget>[
