@@ -75,71 +75,75 @@ class _FeedPageState extends State<FeedPage> {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: Scaffold(
-        appBar:AppBar(
-          elevation: 0.0,
-          backgroundColor: Colors.white,
-          title: Text(
-            "Feed",
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 15.0,
-              fontFamily: "Pacifico",
+      home: GestureDetector(
+        onPanDown: (_) => FocusScope.of(context).requestFocus(FocusNode()),
+        child: Scaffold(
+          appBar:AppBar(
+            elevation: 0.0,
+            backgroundColor: Colors.white,
+            title: Text(
+              "Feed",
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 15.0,
+                fontFamily: "Pacifico",
+              ),
+            ),
+            bottom: PreferredSize(
+              preferredSize: const Size.fromHeight(54),
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 9),
+                    child: _textField(),
+                  ),
+                  Divider(
+                    height: 0,
+                    thickness: 0.5,
+                    color: HexColor(Constants.separatingLineColor),
+                  ),
+                ],
+              ),
             ),
           ),
-          bottom: PreferredSize(
-            preferredSize: const Size.fromHeight(54),
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 9),
-                  child: _textField(),
-                ),
-                Divider(
-                  height: 0,
-                  thickness: 0.5,
-                  color: HexColor(Constants.separatingLineColor),
-                ),
-              ],
-            ),
-          ),
-        ),
-        body: Center(
-          child: FutureBuilder<List<Article>>(
-            future: articleList,
-            builder: (BuildContext context,
-                AsyncSnapshot<List<Article>> snapshot) {
-              print(snapshot.connectionState);
-              if (snapshot.connectionState != ConnectionState.done) {
-                return CircularProgressIndicator();
-              }
-              if (snapshot.hasData) {
-                if (snapshot.data!.length == 0) {
-                return emptyResultView();
-                } else {
-                  return RefreshIndicator(
-                    onRefresh: () async {
-                      setState(() {
-                        articleList = QiitaClient.fetchArticle(_onFieldSubmitted, 1);
-                      });
-                    },
-                    child: ArticleListView(
-                      articles: snapshot.data!,
-                      onFieldSubmitted: _onFieldSubmitted,
-                    ),
-                  );
+          resizeToAvoidBottomInset: false,
+          body: Center(
+            child: FutureBuilder<List<Article>>(
+              future: articleList,
+              builder: (BuildContext context,
+                  AsyncSnapshot<List<Article>> snapshot) {
+                print(snapshot.connectionState);
+                if (snapshot.connectionState != ConnectionState.done) {
+                  return CircularProgressIndicator();
                 }
-              }
-              if (snapshot.hasError) {
-                return ErrorPage(
-                  refreshFunction: () {
-                    articleList = QiitaClient.fetchArticle("", 1);
-                  },
-                );
-              } else {
-                return Text("データが存在しません");
-              }
-            },
+                if (snapshot.hasData) {
+                  if (snapshot.data!.length == 0) {
+                  return emptyResultView();
+                  } else {
+                    return RefreshIndicator(
+                      onRefresh: () async {
+                        setState(() {
+                          articleList = QiitaClient.fetchArticle(_onFieldSubmitted, 1);
+                        });
+                      },
+                      child: ArticleListView(
+                        articles: snapshot.data!,
+                        onFieldSubmitted: _onFieldSubmitted,
+                      ),
+                    );
+                  }
+                }
+                if (snapshot.hasError) {
+                  return ErrorPage(
+                    refreshFunction: () {
+                      articleList = QiitaClient.fetchArticle("", 1);
+                    },
+                  );
+                } else {
+                  return Text("データが存在しません");
+                }
+              },
+            ),
           ),
         ),
       ),
