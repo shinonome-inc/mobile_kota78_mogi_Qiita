@@ -114,17 +114,21 @@ class _FeedPageState extends State<FeedPage> {
                 return CircularProgressIndicator();
               }
               if (snapshot.hasData) {
-                return RefreshIndicator(
-                  onRefresh: () async {
-                    setState(() {
-                      articleList = QiitaClient.fetchArticle(_onFieldSubmitted, 1);
-                    });
-                  },
-                  child: ArticleListView(
-                    articles: snapshot.data!,
-                    onFieldSubmitted: _onFieldSubmitted,
-                  ),
-                );
+                if (snapshot.data!.length == 0) {
+                return emptyResultView();
+                } else {
+                  return RefreshIndicator(
+                    onRefresh: () async {
+                      setState(() {
+                        articleList = QiitaClient.fetchArticle(_onFieldSubmitted, 1);
+                      });
+                    },
+                    child: ArticleListView(
+                      articles: snapshot.data!,
+                      onFieldSubmitted: _onFieldSubmitted,
+                    ),
+                  );
+                }
               }
               if (snapshot.hasError) {
                 return ErrorPage(
@@ -137,6 +141,36 @@ class _FeedPageState extends State<FeedPage> {
               }
             },
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget emptyResultView() {
+    return Expanded(
+      child: Container(
+        alignment: Alignment.center,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              '検索にマッチする記事はありませんでした',
+              style: TextStyle(
+                color: HexColor(Constants.black),
+                fontSize: 14.0,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            const SizedBox(height: 20.0),
+            Text(
+              '検索条件を変えるなどして再度検索をしてください',
+              style: TextStyle(
+                color: HexColor(Constants.darkGrey),
+                fontSize: 12.0,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ],
         ),
       ),
     );
