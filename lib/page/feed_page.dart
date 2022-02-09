@@ -121,23 +121,31 @@ class _FeedPageState extends State<FeedPage> {
                 if (snapshot.connectionState != ConnectionState.done) {
                   return CircularProgressIndicator();
                 }
-                if (snapshot.hasData) {
-                  if (snapshot.data!.length == 0) {
-                    return emptyResultView();
-                  } else {
-                    return RefreshIndicator(
-                      onRefresh: () async {
-                        setState(() {
-                          articleList =
-                              QiitaClient.fetchArticle(_onFieldSubmitted, 1);
-                        });
-                      },
-                      child: ArticleListView(
-                        articles: snapshot.data!,
-                        onFieldSubmitted: _onFieldSubmitted,
-                      ),
-                    );
+                try {
+                  if (snapshot.hasData) {
+                    if (snapshot.data!.length == 0) {
+                      return emptyResultView();
+                    } else {
+                      return RefreshIndicator(
+                        onRefresh: () async {
+                          setState(() {
+                            articleList =
+                                QiitaClient.fetchArticle(_onFieldSubmitted, 1);
+                          });
+                        },
+                        child: ArticleListView(
+                          articles: snapshot.data!,
+                          onFieldSubmitted: _onFieldSubmitted,
+                        ),
+                      );
+                    }
                   }
+                } catch (exception) {
+                  return ErrorPage(
+                    refreshFunction: () {
+                      articleList = QiitaClient.fetchArticle("", 1);
+                    },
+                  );
                 }
                 if (snapshot.hasError) {
                   return ErrorPage(
